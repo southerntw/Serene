@@ -1,1 +1,1 @@
-# Serene
+Serene - Final Project
