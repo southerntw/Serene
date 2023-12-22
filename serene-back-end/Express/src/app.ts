@@ -3,17 +3,13 @@ import * as dotenv from "dotenv";
 import cors from "cors";
 import swaggerUi from "swagger-ui-express";
 import morgan from "morgan";
-import apicache from "apicache";
 import "express-async-errors";
 
 import { errorHandler } from "./middlewares/errors";
 import router from "./routes/";
 
 dotenv.config();
-let cache = apicache.middleware;
-
 const app = express();
-app.use(cache("5 minutes"));
 
 app.use(cors({ credentials: true, origin: `*` }));
 app.use(express.json());

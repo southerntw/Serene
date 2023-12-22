@@ -18,8 +18,9 @@ export default class AuthController {
     }
 
     const data = matchedData(req);
+    console.log(data);
 
-    const { name, email, password } = data.body;
+    const { name, email, password } = data;
     if (!name || !email || !password) {
       throw new BadRequestError({
         message: "Missing required fields",
