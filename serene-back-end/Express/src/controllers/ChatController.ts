@@ -1,15 +1,18 @@
-import { Get, Route } from "tsoa";
+import { Request, Response } from "express";
 import axios from "axios";
 
 interface ChatSendResponse {
-  message?: string;
+  success: boolean;
+  chat?: string;
   sentiment?: boolean;
+  message?: string;
 }
 
-@Route("chat")
 export default class ChatController {
-  @Get("send")
-  public async sendChat(): Promise<ChatSendResponse> {
+  public async sendChat(
+    _req: Request,
+    res: Response,
+  ): Promise<ChatSendResponse> {
     const chatUrl = process.env.CHAT_API_URL + "/chat/send";
     const requestBody = {
       message: {
@@ -20,15 +23,24 @@ export default class ChatController {
 
     try {
       const response = await axios.post(chatUrl, requestBody);
-      return {
-        message: response.data.message,
+      res.json({
+        success: true,
+        chat: response.data.message,
         sentiment: response.data.sentiment,
-      };
+      });
+      return;
     } catch (error) {
       console.log("Error: ", error.message);
-      return {
-        message: "Error",
-      };
+      res.json({
+        success: false,
+        message: error.message,
+      });
+      return;
     }
+  }
+
+  public async encourage(): Promise<void> {
+    // TODO: Implement this
+    return;
   }
 }
