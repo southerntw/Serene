@@ -2,28 +2,17 @@ import bcrypt from "bcrypt";
 import { Request, Response } from "express";
 import { users, NewUser } from "../db/schema/users";
 import { db } from "../db/db";
-
-interface RegisterResponse {
-  success: boolean;
-  data?: {
-    name: string;
-    email: string;
-  };
-  message?: string;
-}
+import BadRequestError from "../errors/BadRequestError";
 
 export default class AuthController {
-  public async register(
-    req: Request,
-    res: Response,
-  ): Promise<RegisterResponse> {
+  public async register(req: Request, res: Response): Promise<void> {
     const { name, email, password } = req.body;
     if (!name || !email || !password) {
-      res.json({
-        success: false,
-        message: "Please provide all fields",
+      throw new BadRequestError({
+        code: 400,
+        message: "Missing required fields",
+        logging: true,
       });
-      return;
     }
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -34,7 +23,7 @@ export default class AuthController {
     };
     try {
       await db.insert(users).values(newUser);
-      res.json({
+      res.status(201).json({
         success: true,
         data: {
           name,
@@ -42,10 +31,12 @@ export default class AuthController {
         },
       });
     } catch (err) {
-      res.json({
-        success: false,
-        message: err.message,
-      });
+      throw new Error(err);
     }
+  }
+
+  public async login(_req: Request, res: Response) {
+    res.status(501).json({ success: false, message: "Not implemented" });
+    return;
   }
 }

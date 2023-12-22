@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import swaggerUi from "swagger-ui-express";
 import morgan from "morgan";
+import { errorHandler } from "./middlewares/errors";
+import "express-async-errors";
 
 import router from "./routes/";
 
@@ -28,6 +30,7 @@ app.use(
 );
 
 app.use(router);
+app.use(errorHandler);
 
 app.listen(port, () => {
   return console.log(`Express is listening at http://localhost:${port}`);
