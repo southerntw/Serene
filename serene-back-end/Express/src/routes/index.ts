@@ -1,31 +1,32 @@
 import { Router } from "express";
 import Auth from "../controllers/AuthController";
+import { registerValidator } from "../validators/validators";
 
 const router = Router();
 
 const auth = new Auth();
 
 router.get("/", (_req, res) => {
-  res.send("Safe Space API. Made with Express.js");
+  res.send("Safe Space API");
 });
 
-router.get("/bot/send");
-router.get("/bot/encourage");
+router.get("/v1/bot/send");
+router.get("/v1//bot/encourage");
 
-router.get("/user");
-router.put("/user");
-router.get("/user/{id}");
-router.get("/user/mood");
-router.post("/user/mood");
+router.get("/v1/user");
+router.put("/v1/user");
+router.get("/v1/user/{id}");
+router.get("/v1/user/mood");
+router.post("/v1/user/mood");
 
-router.post("/auth/login");
-router.post("/auth/register", auth.register);
+router.post("/v1/auth/login");
+router.post("/v1/auth/register", registerValidator, auth.register);
 
-router.get("/forum");
-router.get("forum/{id}");
-router.post("/forum");
+router.get("/v1/forum");
+router.get("/v1/forum/{id}");
+router.post("/v1/forum");
 
-router.get("/news");
-router.get("/news/{id}");
+router.get("/v1/news");
+router.get("/v1/news/{id}");
 
 export default router;

@@ -1,18 +1,19 @@
 import express from "express";
+import * as dotenv from "dotenv";
 import cors from "cors";
 import swaggerUi from "swagger-ui-express";
 import morgan from "morgan";
-import { errorHandler } from "./middlewares/errors";
+import apicache from "apicache";
 import "express-async-errors";
 
+import { errorHandler } from "./middlewares/errors";
 import router from "./routes/";
 
-import * as dotenv from "dotenv";
-
 dotenv.config();
+let cache = apicache.middleware;
 
 const app = express();
-const port = 3000;
+app.use(cache("5 minutes"));
 
 app.use(cors({ credentials: true, origin: `*` }));
 app.use(express.json());
@@ -32,6 +33,7 @@ app.use(
 app.use(router);
 app.use(errorHandler);
 
+const port = 3000;
 app.listen(port, () => {
   return console.log(`Express is listening at http://localhost:${port}`);
 });
