@@ -8,3 +8,11 @@ export const registerValidator = [
     min: 6,
   }),
 ];
+
+export const loginValidator = [
+  body("email", "Email should not be empty").not().isEmpty(),
+  body("email", "Invalid email format").isEmail(),
+  body("password", "Password should be at least 6 characters").isLength({
+    min: 6,
+  }),
+];

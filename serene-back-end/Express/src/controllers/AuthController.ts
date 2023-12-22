@@ -1,10 +1,13 @@
 import { Request, Response } from "express";
 import { users, NewUser } from "../db/schema/users";
 import { db } from "../db/db";
+import { eq } from "drizzle-orm";
 import BadRequestError from "../errors/BadRequestError";
 import ValidationError from "../errors/ValidationError";
 import { encrypt } from "../helpers/encryptor";
 import { Result, validationResult, matchedData } from "express-validator";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 
 export default class AuthController {
   public async register(req: Request, res: Response): Promise<void> {
@@ -49,8 +52,55 @@ export default class AuthController {
     }
   }
 
-  public async login(_req: Request, res: Response) {
-    res.status(501).json({ success: false, message: "Not implemented" });
-    return;
+  public async login(req: Request, res: Response) {
+    const result: Result = validationResult(req);
+    if (!result.isEmpty()) {
+      throw new ValidationError({
+        message: "Missing required fields",
+        logging: true,
+        context: result.array(),
+      });
+    }
+
+    const data = matchedData(req);
+    const { email, password } = data;
+
+    try {
+      const findUser = await db
+        .select()
+        .from(users)
+        .where(eq(users.email, email))
+        .limit(1);
+
+      if (!findUser) {
+        throw new BadRequestError({ message: "Invalid credentials" });
+      }
+
+      const user = findUser[0];
+
+      const passwordIsValid = await bcrypt.compare(password, user.password);
+
+      if (!passwordIsValid) {
+        throw new BadRequestError({ message: "Invalid credentials" });
+      }
+
+      const payload = { id: user.id, name: user.name, email: user.email };
+      const accessToken = jwt.sign(payload, process.env.JWT_SECRET, {
+        expiresIn: "1d",
+      });
+
+      res.status(200).json({
+        success: true,
+        data: {
+          name: user.name,
+          email: user.email,
+          access_token: accessToken,
+        },
+      });
+      return;
+    } catch (err) {
+      console.log(err);
+      throw new Error(err);
+    }
   }
 }

@@ -1,6 +1,6 @@
 import { Router } from "express";
 import Auth from "../controllers/AuthController";
-import { registerValidator } from "../validators/validators";
+import { registerValidator, loginValidator } from "../validators/validators";
 
 const router = Router();
 
@@ -19,7 +19,7 @@ router.get("/v1/user/{id}");
 router.get("/v1/user/mood");
 router.post("/v1/user/mood");
 
-router.post("/v1/auth/login");
+router.post("/v1/auth/login", loginValidator, auth.login);
 router.post("/v1/auth/register", registerValidator, auth.register);
 
 router.get("/v1/forum");
