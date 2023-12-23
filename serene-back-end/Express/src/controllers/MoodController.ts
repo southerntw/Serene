@@ -1,13 +1,12 @@
 import { Request, Response } from "express";
 import { db } from "../db/db";
 import { eq } from "drizzle-orm";
-import { users, NewUser } from "../db/schema/users";
+import { moods, NewMood } from "../db/schema/moods";
 import { validationResult, Result, matchedData } from "express-validator";
 import BadRequestError from "../errors/BadRequestError";
-import ValidationError from "../errors/ValidationError";
 
-export default class UserController {
-  public async getUser(req: Request, res: Response) {
+export default class MoodController {
+  public async getMood(req: Request, res: Response) {
     const result: Result = validationResult(req);
     if (!result.isEmpty()) {
       throw new BadRequestError({
@@ -17,15 +16,14 @@ export default class UserController {
       });
     }
 
-    const userId = Number(req.params.id);
+    const id = Number(req.params.id);
 
     try {
-      const usersData = await db
+      const userMoods = await db
         .select()
-        .from(users)
-        .where(eq(users.id, userId));
-      const user = usersData[0];
-      res.json({ success: true, data: user });
+        .from(moods)
+        .where(eq(moods.userId, id));
+      res.json({ success: true, data: userMoods });
       return;
     } catch (err) {
       console.log(err);
@@ -33,19 +31,36 @@ export default class UserController {
     }
   }
 
-  public async editUser(req: Request, res: Response) {
+  public async addMood(req: Request, res: Response) {
     const result: Result = validationResult(req);
     if (!result.isEmpty()) {
-      throw new ValidationError({
+      throw new BadRequestError({
         message: "Missing required fields",
         logging: true,
         context: result.array(),
       });
     }
+
     const data = matchedData(req);
 
-    // TODO: Edit user schema first then implement this
-    res.json(501).send("Not implemented");
-    return;
+    const newMood: NewMood = {
+      userId: data.userId,
+      type: data.type,
+      description: data.description,
+      audio: data.audio,
+    };
+
+    try {
+      await db.insert(moods).values(newMood);
+      res.status(201).json({
+        success: true,
+        data: {
+          newMood,
+        },
+      });
+    } catch (err) {
+      console.log(err);
+      throw new Error(err);
+    }
   }
 }

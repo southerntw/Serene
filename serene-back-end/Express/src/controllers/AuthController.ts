@@ -47,6 +47,7 @@ export default class AuthController {
           email,
         },
       });
+      return;
     } catch (err) {
       throw new Error(err);
     }
@@ -92,6 +93,7 @@ export default class AuthController {
       res.status(200).json({
         success: true,
         data: {
+          id: user.id,
           name: user.name,
           email: user.email,
           access_token: accessToken,
