@@ -5,7 +5,7 @@ import { news } from "../db/schema/news";
 import { validationResult, Result } from "express-validator";
 import BadRequestError from "../errors/BadRequestError";
 
-export default class ThreadController {
+export class NewsController {
   public async getNews(_req: Request, res: Response) {
     try {
       const newsThreads = await db.select().from(news);

@@ -6,7 +6,7 @@ import { validationResult, Result, matchedData } from "express-validator";
 import BadRequestError from "../errors/BadRequestError";
 import ValidationError from "../errors/ValidationError";
 
-export default class ThreadController {
+export class ThreadController {
   public async getThreads(_req: Request, res: Response) {
     try {
       const forumThreads = await db.select().from(threads);

@@ -9,7 +9,7 @@ import { Result, validationResult, matchedData } from "express-validator";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
-export default class AuthController {
+export class AuthController {
   public async register(req: Request, res: Response): Promise<void> {
     const result: Result = validationResult(req);
     if (!result.isEmpty()) {

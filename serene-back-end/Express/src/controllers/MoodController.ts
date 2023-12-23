@@ -5,7 +5,7 @@ import { moods, NewMood } from "../db/schema/moods";
 import { validationResult, Result, matchedData } from "express-validator";
 import BadRequestError from "../errors/BadRequestError";
 
-export default class MoodController {
+export class MoodController {
   public async getMood(req: Request, res: Response) {
     const result: Result = validationResult(req);
     if (!result.isEmpty()) {

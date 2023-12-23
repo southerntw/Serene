@@ -1,27 +1,22 @@
 import { Router } from "express";
-import Auth from "../controllers/AuthController";
-import Bot from "../controllers/BotController";
-import Mood from "../controllers/MoodController";
-import Thread from "../controllers/ThreadController";
-import News from "../controllers/NewsController";
-import User from "../controllers/UserController";
 import verifyToken from "../middlewares/verifyToken";
 import {
   registerValidator,
   loginValidator,
-  chatValidator,
   getIdValidator,
+  chatValidator,
   addMoodValidator,
   postThreadValidator,
 } from "../middlewares/requestValidators";
+import * as Controllers from "../controllers";
 
 const router = Router();
-const auth = new Auth();
-const user = new User();
-const bot = new Bot();
-const mood = new Mood();
-const thread = new Thread();
-const news = new News();
+const auth = new Controllers.AuthController();
+const user = new Controllers.UserController();
+const bot = new Controllers.BotController();
+const mood = new Controllers.MoodController();
+const thread = new Controllers.ThreadController();
+const news = new Controllers.NewsController();
 
 router.get("/", (_req, res) => {
   res.send("Safe Space API");

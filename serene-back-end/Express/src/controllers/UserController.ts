@@ -6,7 +6,7 @@ import { validationResult, Result, matchedData } from "express-validator";
 import BadRequestError from "../errors/BadRequestError";
 import ValidationError from "../errors/ValidationError";
 
-export default class UserController {
+export class UserController {
   public async getUser(req: Request, res: Response) {
     const result: Result = validationResult(req);
     if (!result.isEmpty()) {
@@ -25,7 +25,14 @@ export default class UserController {
         .from(users)
         .where(eq(users.id, userId));
       const user = usersData[0];
-      res.json({ success: true, data: user });
+      res.json({
+        success: true,
+        data: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+        },
+      });
       return;
     } catch (err) {
       console.log(err);

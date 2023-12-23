@@ -10,7 +10,7 @@ interface ChatSendResponse {
   message?: string;
 }
 
-export default class BotController {
+export class BotController {
   public async sendChat(
     req: Request,
     res: Response,
