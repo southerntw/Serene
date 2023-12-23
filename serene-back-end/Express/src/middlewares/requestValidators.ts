@@ -16,3 +16,9 @@ export const loginValidator = [
     min: 6,
   }),
 ];
+
+export const chatValidator = [
+  body("message", "Message should not be empty").not().isEmpty(),
+  body("userId", "User ID should not be empty").not().isEmpty(),
+  body("userId", "User ID must be numeric").isNumeric(),
+];

@@ -1,17 +1,24 @@
 import { Router } from "express";
 import Auth from "../controllers/AuthController";
-import { registerValidator, loginValidator } from "../validators/validators";
+import Bot from "../controllers/BotController";
+import verifyToken from "../middlewares/verifyToken";
+import {
+  registerValidator,
+  loginValidator,
+  chatValidator,
+} from "../middlewares/requestValidators";
 
 const router = Router();
 
 const auth = new Auth();
+const bot = new Bot();
 
 router.get("/", (_req, res) => {
   res.send("Safe Space API");
 });
 
-router.get("/v1/bot/send");
-router.get("/v1//bot/encourage");
+router.post("/v1/bot/send", verifyToken, chatValidator, bot.sendChat);
+router.get("/v1/bot/encourage", verifyToken, bot.encourage);
 
 router.get("/v1/user");
 router.put("/v1/user");
