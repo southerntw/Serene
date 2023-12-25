@@ -7,6 +7,8 @@ import {
   chatValidator,
   addMoodValidator,
   postThreadValidator,
+  editProfileValidator,
+  userIdValidator,
 } from "../middlewares/requestValidators";
 import * as Controllers from "../controllers";
 
@@ -25,9 +27,9 @@ router.get("/", (_req, res) => {
 router.post("/v1/bot/send", verifyToken, chatValidator, bot.sendChat);
 router.get("/v1/bot/encourage", verifyToken, bot.encourage);
 
-router.put("/v1/user", verifyToken, user.editUser);
-router.get("/v1/user/:id", getIdValidator, user.getUser);
-router.get("/v1/user/mood/:id", verifyToken, getIdValidator, mood.getMood);
+router.put("/v1/user", verifyToken, editProfileValidator, user.editUser);
+router.get("/v1/user/:id", userIdValidator, user.getUser);
+router.get("/v1/user/mood/:id", verifyToken, userIdValidator, mood.getMood);
 router.post("/v1/user/mood", verifyToken, addMoodValidator, mood.addMood);
 
 router.post("/v1/auth/login", loginValidator, auth.login);

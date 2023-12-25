@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { db } from "../db/db";
 import { eq } from "drizzle-orm";
-import { users, NewUser } from "../db/schema/users";
+import { users } from "../db/schema/users";
 import { validationResult, Result, matchedData } from "express-validator";
 import BadRequestError from "../errors/BadRequestError";
 import ValidationError from "../errors/ValidationError";
@@ -17,7 +17,7 @@ export class UserController {
       });
     }
 
-    const userId = Number(req.params.id);
+    const userId = req.params.id;
 
     try {
       const usersData = await db
@@ -31,6 +31,9 @@ export class UserController {
           id: user.id,
           name: user.name,
           email: user.email,
+          avatar: user.avatar,
+          about: user.about,
+          birthdate: user.birthdate,
         },
       });
       return;
@@ -50,9 +53,35 @@ export class UserController {
       });
     }
     const data = matchedData(req);
-
-    // TODO: Edit user schema first then implement this
-    res.json(501).send("Not implemented");
-    return;
+    console.log(data);
+    try {
+      await db
+        .update(users)
+        .set({
+          id: data.id,
+          name: data.name,
+          email: data.email,
+          password: data.password,
+          avatar: data.avatar,
+          about: data.about,
+          birthdate: data.birthdate,
+        })
+        .where(eq(users.id, data.id));
+      res.json({
+        success: true,
+        data: {
+          id: data.id,
+          name: data.name,
+          email: data.email,
+          avatar: data.avatar,
+          about: data.about,
+          birthdate: data.birthdate,
+        },
+      });
+      return;
+    } catch (err) {
+      console.log(err);
+      throw new Error(err);
+    }
   }
 }

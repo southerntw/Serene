@@ -10,4 +10,4 @@ if (!process.env.DATABASE_URL) {
 
 const queryClient = postgres(process.env.DATABASE_URL!);
 
-export const db = drizzle(queryClient);
+export const db = drizzle(queryClient, { logger: true });

@@ -20,12 +20,17 @@ export const loginValidator = [
 export const chatValidator = [
   body("message", "Message should not be empty").not().isEmpty(),
   body("userId", "User ID should not be empty").not().isEmpty(),
-  body("userId", "User ID must be numeric").isNumeric(),
+  body("userId", "User ID must be a UUID").isUUID(),
 ];
 
 export const getIdValidator = [
   param("id", "ID should not be empty").not().isEmpty(),
-  param("id", "ID must be numeric").isNumeric(),
+  param("id", "ID must be a number").isNumeric(),
+];
+
+export const userIdValidator = [
+  param("id", "ID should not be empty").not().isEmpty(),
+  param("id", "ID must be a UUID").isUUID(),
 ];
 
 export const addMoodValidator = [
@@ -40,4 +45,18 @@ export const postThreadValidator = [
   body("tag", "Tag should a string").isString().optional(),
   body("threadStarter", "threadStarter should not be empty").not().isEmpty(),
   body("threadStarter", "threadStarter must be numeric").isNumeric(),
+];
+
+export const editProfileValidator = [
+  body("id", "ID should not be empty").not().isEmpty(),
+  body("id", "ID must be a UUID").isUUID(),
+  body("name", "Name should be at least 4 characters").isLength({ min: 4 }),
+  body("email", "Email should not be empty").not().isEmpty(),
+  body("email", "Invalid email format").normalizeEmail().isEmail(),
+  body("password", "Password should be at least 6 characters").isLength({
+    min: 6,
+  }),
+  body("avatar", "Avatar must be a string").isString().optional(),
+  body("about", "About must be a string").isString().optional(),
+  body("birthdate", "Birthdate must be a date").isISO8601().toDate().optional(),
 ];

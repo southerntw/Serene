@@ -7,13 +7,13 @@ END $$;
 CREATE TABLE IF NOT EXISTS "chats" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"history" varchar,
-	"user_id" integer
+	"user_id" uuid
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "comments" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"comment" varchar NOT NULL,
-	"user_id" integer,
+	"user_id" uuid,
 	"thread_id" integer
 );
 --> statement-breakpoint
@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS "moods" (
 	"type" "mood" NOT NULL,
 	"description" varchar,
 	"audio" varchar,
-	"user_id" integer
+	"user_id" uuid
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "news" (
@@ -37,14 +37,18 @@ CREATE TABLE IF NOT EXISTS "threads" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"text" varchar NOT NULL,
 	"tag" varchar,
-	"thread_starter" integer
+	"thread_starter" uuid
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "users" (
-	"id" serial PRIMARY KEY NOT NULL,
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"name" varchar NOT NULL,
 	"email" varchar NOT NULL,
 	"password" varchar NOT NULL,
+	"avatar" varchar,
+	"about" varchar,
+	"birth_date" timestamp,
+	"created_at" timestamp DEFAULT now() NOT NULL,
 	CONSTRAINT "users_email_unique" UNIQUE("email")
 );
 --> statement-breakpoint

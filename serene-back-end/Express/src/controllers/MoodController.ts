@@ -16,7 +16,7 @@ export class MoodController {
       });
     }
 
-    const id = Number(req.params.id);
+    const id = req.params.id;
 
     try {
       const userMoods = await db
