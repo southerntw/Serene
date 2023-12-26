@@ -23,7 +23,7 @@ export default class BadRequestError extends CustomError {
   }
 
   get errors() {
-    return [{ message: this.message, context: this._context }];
+    return { message: this.message, context: this._context };
   }
 
   get statusCode() {

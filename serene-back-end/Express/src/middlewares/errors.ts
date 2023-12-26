@@ -23,11 +23,28 @@ export const errorHandler = (
       );
     }
 
-    return res.status(statusCode).send({ errors });
+    return res.status(statusCode).send({ success: false, errors });
+  } else if (err instanceof SyntaxError) {
+    const statusCode = 400;
+    const errors = { message: "Invalid JSON syntax in request body" };
+    console.error(
+      JSON.stringify(
+        {
+          code: statusCode,
+          errors,
+          stack: err.stack,
+        },
+        null,
+        2,
+      ),
+    );
+    return res.status(statusCode).send({ success: false, errors });
   }
 
   console.error(JSON.stringify(err, null, 2));
   return res
     .status(500)
-    .send({ errors: [{ message: "Something went wrong" }] });
+    .send({ success: false, errors: 
+      { message: "An error occurred. Please check your request and try again." }
+    });
 };

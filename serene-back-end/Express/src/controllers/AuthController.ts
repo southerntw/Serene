@@ -4,7 +4,7 @@ import { db } from "../db/db";
 import { eq } from "drizzle-orm";
 import BadRequestError from "../errors/BadRequestError";
 import ValidationError from "../errors/ValidationError";
-import { encrypt } from "../helpers/encryptor";
+import { encrypt } from "../utils/encryptor";
 import { Result, validationResult, matchedData } from "express-validator";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";

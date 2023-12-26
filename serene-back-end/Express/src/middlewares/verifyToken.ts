@@ -9,7 +9,7 @@ export default function verifyToken(
 ) {
   const authHeader = req.headers.authorization;
   if (!authHeader) {
-    throw new UnauthorizedError({ message: "No token provided" });
+    throw new UnauthorizedError({ message: "No token provided", });
   }
   const token = authHeader.split(" ")[1];
 
