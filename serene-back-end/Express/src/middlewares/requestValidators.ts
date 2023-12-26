@@ -59,4 +59,5 @@ export const editProfileValidator = [
   body("avatar", "Avatar must be a string").isString().optional(),
   body("about", "About must be a string").isString().optional(),
   body("birthdate", "Birthdate must be a date").isISO8601().toDate().optional(),
+  body("gender", "Gender should not be empty").isString().optional(),
 ];
