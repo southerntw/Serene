@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { db } from "../db/db";
+import { db } from "../database/db";
+import { threads, NewThread } from "../database/schema/threads";
 import { eq } from "drizzle-orm";
-import { threads, NewThread } from "../db/schema/threads";
 import { validationResult, Result, matchedData } from "express-validator";
 import BadRequestError from "../errors/BadRequestError";
 import ValidationError from "../errors/ValidationError";

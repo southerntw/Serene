@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { db } from "../db/db";
+import { db } from "../database/db";
 import { eq } from "drizzle-orm";
-import { moods, NewMood } from "../db/schema/moods";
+import { moods, NewMood } from "../database/schema/moods";
 import { validationResult, Result, matchedData } from "express-validator";
 import BadRequestError from "../errors/BadRequestError";
 

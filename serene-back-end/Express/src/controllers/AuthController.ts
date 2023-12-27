@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { users, NewUser } from "../db/schema/users";
-import { db } from "../db/db";
+import { db } from "../database/db";
+import { users, NewUser } from "../database/schema/users";
 import { eq } from "drizzle-orm";
 import BadRequestError from "../errors/BadRequestError";
 import ValidationError from "../errors/ValidationError";
