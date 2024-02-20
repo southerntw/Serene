@@ -10,38 +10,39 @@ import androidx.compose.ui.unit.sp
 import com.southerntw.safespace.R
 
 val Roboto = FontFamily(
-    Font(R.font.Roboto_BlackItalic, FontWeight.Bold, FontStyle.Italic),
-    Font(R.font.Roboto_LightItalic, FontWeight.Light, FontStyle.Italic),
-    Font(R.font.Roboto_ThinItalic, FontWeight.Thin, FontStyle.Italic),
-    Font(R.font.Roboto_Black, FontWeight.Bold),
-    Font(R.font.Roboto_Light, FontWeight.Light),
-    Font(R.font.Roboto_Thin, FontWeight.Thin),
-    Font(R.font.Roboto_BoldItalic, FontWeight.Bold, FontStyle.Italic),
-    Font(R.font.Roboto_MediumItalic, FontWeight.Medium, FontStyle.Italic),
-    Font(R.font.Roboto_Bold, FontWeight.Bold),
-    Font(R.font.Roboto_Medium, FontWeight.Medium),
-    Font(R.font.Roboto_Italic, FontWeight.Normal, FontStyle.Italic),
-    Font(R.font.Roboto_Regular, FontWeight.Normal)
+    Font(R.font.roboto_blackitalic, FontWeight.Bold, FontStyle.Italic),
+    Font(R.font.roboto_lightitalic, FontWeight.Light, FontStyle.Italic),
+    Font(R.font.roboto_thinitalic, FontWeight.Thin, FontStyle.Italic),
+    Font(R.font.roboto_black, FontWeight.Bold),
+    Font(R.font.roboto_light, FontWeight.Light),
+    Font(R.font.roboto_thin, FontWeight.Thin),
+    Font(R.font.roboto_bolditalic, FontWeight.Bold, FontStyle.Italic),
+    Font(R.font.roboto_mediumitalic, FontWeight.Medium, FontStyle.Italic),
+    Font(R.font.roboto_bold, FontWeight.Bold),
+    Font(R.font.roboto_medium, FontWeight.Medium),
+    Font(R.font.roboto_italic, FontWeight.Normal, FontStyle.Italic),
+    Font(R.font.roboto_regular, FontWeight.Normal)
 )
 
 val Urbanist = FontFamily(
-    Font(R.font.Urbanist_Bold, FontWeight.Bold),
-    Font(R.font.Urbanist_Italic, FontWeight.Normal, FontStyle.Italic),
-    Font(R.font.Urbanist_Regular, FontWeight.Normal),
-    Font(R.font.Urbanist_ExtraBoldItalic, FontWeight.ExtraBold, FontStyle.Italic),
-    Font(R.font.Urbanist_LightItalic, FontWeight.Light, FontStyle.Italic),
-    Font(R.font.Urbanist_SemiBoldItalic, FontWeight.SemiBold, FontStyle.Italic),
-    Font(R.font.Urbanist_ExtraBold, FontWeight.ExtraBold),
-    Font(R.font.Urbanist_Light, FontWeight.Light),
-    Font(R.font.Urbanist_SemiBold, FontWeight.SemiBold),
-    Font(R.font.Urbanist_BlackItalic, FontWeight.Bold, FontStyle.Italic),
-    Font(R.font.Urbanist_ExtraLightItalic, FontWeight.ExtraLight, FontStyle.Italic),
-    Font(R.font.Urbanist_MediumItalic, FontWeight.Medium, FontStyle.Italic),
-    Font(R.font.Urbanist_ExtraLight, FontWeight.ExtraLight),
-    Font(R.font.Urbanist_Medium, FontWeight.Medium),
-    Font(R.font.Urbanist_ThinItalic, FontWeight.Thin, FontStyle.Italic),
-    Font(R.font.Urbanist_Thin, FontWeight.Thin)
+    Font(R.font.urbanist_bold, FontWeight.Bold),
+    Font(R.font.urbanist_italic, FontWeight.Normal, FontStyle.Italic),
+    Font(R.font.urbanist_regular, FontWeight.Normal),
+    Font(R.font.urbanist_extrabolditalic, FontWeight.ExtraBold, FontStyle.Italic),
+    Font(R.font.urbanist_lightitalic, FontWeight.Light, FontStyle.Italic),
+    Font(R.font.urbanist_semibolditalic, FontWeight.SemiBold, FontStyle.Italic),
+    Font(R.font.urbanist_extrabold, FontWeight.ExtraBold),
+    Font(R.font.urbanist_light, FontWeight.Light),
+    Font(R.font.urbanist_semibold, FontWeight.SemiBold),
+    Font(R.font.urbanist_blackitalic, FontWeight.Bold, FontStyle.Italic),
+    Font(R.font.urbanist_extralightitalic, FontWeight.ExtraLight, FontStyle.Italic),
+    Font(R.font.urbanist_mediumitalic, FontWeight.Medium, FontStyle.Italic),
+    Font(R.font.urbanist_extralight, FontWeight.ExtraLight),
+    Font(R.font.urbanist_medium, FontWeight.Medium),
+    Font(R.font.urbanist_thinitalic, FontWeight.Thin, FontStyle.Italic),
+    Font(R.font.urbanist_thin, FontWeight.Thin)
 )
+
 
 
 // Set of Material typography styles to start with
@@ -91,14 +92,19 @@ val Typography = Typography(
         letterSpacing = 0.sp
     ),
 
-    /* Other default text styles to override
-
     labelSmall = TextStyle(
-        fontFamily = FontFamily.Default,
+        fontFamily = Urbanist,
+        fontWeight = FontWeight.Normal,
+        fontSize = 12.sp,
+        lineHeight = 20.sp,
+        letterSpacing = 0.sp
+    ),
+
+    labelMedium = TextStyle(
+        fontFamily = Urbanist,
         fontWeight = FontWeight.Medium,
-        fontSize = 11.sp,
-        lineHeight = 16.sp,
-        letterSpacing = 0.5.sp
-    )
-    */
+        fontSize = 14.sp,
+        lineHeight = 20.sp,
+        letterSpacing = 0.sp
+    ),
 )
