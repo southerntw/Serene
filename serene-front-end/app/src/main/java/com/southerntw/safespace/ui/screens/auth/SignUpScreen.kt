@@ -20,6 +20,7 @@ import coil.compose.AsyncImage
 import com.southerntw.safespace.R
 import com.southerntw.safespace.ui.composables.AuthTextField
 import com.southerntw.safespace.ui.composables.ButtonFilled
+import com.southerntw.safespace.ui.navigation.screen.Screen
 
 @Composable
 fun SignUpScreen(modifier: Modifier = Modifier,
@@ -27,7 +28,13 @@ fun SignUpScreen(modifier: Modifier = Modifier,
 ) {
     SignUpContent(
         modifier = modifier,
-        onSignUpClicked = {},
+        onSignUpClicked = {
+            navHostController.navigate(Screen.OnBoarding.route) {
+                popUpTo(Screen.OnBoarding.route) {
+                    inclusive = true
+                }
+            }
+        },
         inputName = "",
         inputEmail = "",
         inputPassword = "",

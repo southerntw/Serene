@@ -48,11 +48,17 @@ fun StartScreen(
                 inclusive = true
             }
         }
+    }, onGuestClicked = {
+        navHostController.navigate(Screen.Home.route) {
+            popUpTo(Screen.Home.route) {
+                inclusive = true
+            }
+        }
     })
 }
 
 @Composable
-fun StartContent(modifier: Modifier, onSignInClicked: () -> Unit, onSignUpClicked: () -> Unit) {
+fun StartContent(modifier: Modifier, onSignInClicked: () -> Unit, onSignUpClicked: () -> Unit, onGuestClicked: () -> Unit) {
     Column(modifier = modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
         AsyncImage(model = R.drawable.logo, contentDescription = "Safespace logo", modifier = modifier
             .height(80.dp)
@@ -72,7 +78,7 @@ fun StartContent(modifier: Modifier, onSignInClicked: () -> Unit, onSignUpClicke
         ButtonFilled(modifier = modifier, onClicked = onSignInClicked, text = "Sign In")
         ButtonOutlined(modifier = modifier, onClicked = onSignUpClicked, text = "Sign Up")
 
-        TextButton(onClick = { /*TODO*/ }) {
+        TextButton(onClick = onGuestClicked) {
             Text(text = "continue as a guest...", style = MaterialTheme.typography.labelSmall, color = AlmostBlack)
         }
 

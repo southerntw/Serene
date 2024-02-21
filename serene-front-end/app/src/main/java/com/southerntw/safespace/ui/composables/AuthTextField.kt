@@ -18,11 +18,14 @@ fun AuthTextField(modifier: Modifier = Modifier,
     input: String,
     onInputChanged: (String) -> Unit,
     label: String,
-    isPassword: Boolean = false
+    isPassword: Boolean = false,
+    multipleLines: Boolean = false
 ) {
     OutlinedTextField(label = { Text(label) },
         value = input,
         onValueChange = onInputChanged,
+        minLines = if (multipleLines) 5 else 1,
+        maxLines = if (multipleLines) 7 else 1,
         modifier = modifier.fillMaxWidth().padding(bottom = 16.dp),
         colors = TextFieldDefaults.colors(
             focusedTextColor = AlmostBlack,

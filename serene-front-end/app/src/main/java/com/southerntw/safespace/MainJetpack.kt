@@ -16,9 +16,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.southerntw.safespace.ui.navigation.screen.Screen
+import com.southerntw.safespace.ui.screens.auth.OnBoardingScreen
 import com.southerntw.safespace.ui.screens.auth.SignInScreen
 import com.southerntw.safespace.ui.screens.auth.SignUpScreen
 import com.southerntw.safespace.ui.screens.auth.StartScreen
+import com.southerntw.safespace.ui.screens.home.HomeScreen
 import com.southerntw.safespace.ui.theme.SafespaceTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -37,7 +39,6 @@ fun MainJetpack(
             navController = navHostController,
             startDestination = Screen.Start.route,
             modifier = Modifier.padding(
-                // TODO: Add edge to edge
                 top = if (
                     currentRoute == Screen.SignIn.route ||
                     currentRoute == Screen.SignUp.route
@@ -55,6 +56,12 @@ fun MainJetpack(
             }
             composable(Screen.SignUp.route) {
                 SignUpScreen(navHostController = navHostController)
+            }
+            composable(Screen.OnBoarding.route) {
+                OnBoardingScreen(navHostController = navHostController)
+            }
+            composable(Screen.Home.route) {
+                HomeScreen(navHostController = navHostController)
             }
         }
     }
