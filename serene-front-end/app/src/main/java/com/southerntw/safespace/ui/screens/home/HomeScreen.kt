@@ -34,8 +34,8 @@ fun HomeContent(modifier: Modifier, name: String) {
         Spacer(modifier.height(54.dp))
         Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(26.dp)) {
             HomeEntry(headerImage = R.drawable.entry_header1, entryName = "Have a Chat!", entryDescription = "With our AI companion!", onClicked = {})
-            HomeEntry(headerImage = R.drawable.entry_header1, entryName = "Have a Chat!", entryDescription = "With our AI companion!", onClicked = {})
-            HomeEntry(headerImage = R.drawable.entry_header1, entryName = "Have a Chat!", entryDescription = "With our AI companion!", onClicked = {})
+            HomeEntry(headerImage = R.drawable.entry_header2, entryName = "Check out the community", entryDescription = "And find somebody alike.", onClicked = {})
+            HomeEntry(headerImage = R.drawable.entry_header3, entryName = "Latest news on Mental Health", entryDescription = "Keep up to date to recent informations.", onClicked = {})
         }
     }
 }
