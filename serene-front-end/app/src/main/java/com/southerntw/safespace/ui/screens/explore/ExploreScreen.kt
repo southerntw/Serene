@@ -26,12 +26,18 @@ import com.southerntw.safespace.ui.composables.HomeEntry
 import com.southerntw.safespace.ui.composables.NewsEntry
 import com.southerntw.safespace.ui.composables.TagEntry
 import com.southerntw.safespace.ui.composables.ThreadEntry
+import com.southerntw.safespace.ui.navigation.screen.Screen
 import com.southerntw.safespace.ui.theme.AlmostBlack
 
 @Composable
 fun ExploreScreen(modifier: Modifier = Modifier, navHostController: NavHostController) {
-    ExploreContent(modifier = modifier, onTagClicked = {}, onThreadClicked = {}, onNewsClicked = {},
-    onMoreNewsClicked = {}, onMoreThreadClicked = {})
+    ExploreContent(modifier = modifier, onTagClicked = {},
+        onThreadClicked = {
+            navHostController.navigate(Screen.Thread.route)
+        },
+        onNewsClicked = {},
+        onMoreNewsClicked = {},
+        onMoreThreadClicked = {})
 }
 
 @Composable

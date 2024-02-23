@@ -22,6 +22,7 @@ import com.southerntw.safespace.ui.screens.auth.SignInScreen
 import com.southerntw.safespace.ui.screens.auth.SignUpScreen
 import com.southerntw.safespace.ui.screens.auth.StartScreen
 import com.southerntw.safespace.ui.screens.explore.ExploreScreen
+import com.southerntw.safespace.ui.screens.explore.ThreadScreen
 import com.southerntw.safespace.ui.screens.home.HomeScreen
 import com.southerntw.safespace.ui.screens.profile.ProfileScreen
 import com.southerntw.safespace.ui.theme.SafespaceTheme
@@ -77,6 +78,9 @@ fun MainJetpack(
             }
             composable(Screen.Profile.route) {
                 ProfileScreen(navHostController = navHostController)
+            }
+            composable(Screen.Thread.route) {
+                ThreadScreen(navHostController = navHostController)
             }
         }
     }
