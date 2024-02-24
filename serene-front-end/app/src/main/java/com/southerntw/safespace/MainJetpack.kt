@@ -1,5 +1,9 @@
 package com.southerntw.safespace
 
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.scaleIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -56,47 +60,126 @@ fun MainJetpack(
                 top = if (
                     currentRoute == Screen.SignIn.route ||
                     currentRoute == Screen.SignUp.route ||
-                    currentRoute == Screen.OnBoarding.route
+                    currentRoute == Screen.OnBoarding.route ||
+                    currentRoute == Screen.Start.route
                 ) 0.dp else innerPadding.calculateTopPadding(),
                 bottom = if (
                     currentRoute == Screen.OnBoarding.route
                 ) 0.dp else innerPadding.calculateBottomPadding(),
             )
         ) {
-            composable(Screen.Start.route) {
-                StartScreen(navHostController = navHostController)
+            val innerTopPadding = innerPadding.calculateTopPadding()
+
+            composable(Screen.Start.route,
+                enterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Left,
+                        animationSpec = tween(700)
+                    )
+                },
+                exitTransition = {
+                    slideOutOfContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Left,
+                        animationSpec = tween(700)
+                    )
+                }
+            ) {
+                StartScreen(navHostController = navHostController, modifier = modifier.padding(top = innerTopPadding))
             }
-            composable(Screen.SignIn.route) {
+            composable(Screen.SignIn.route,
+                enterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Left,
+                        animationSpec = tween(700)
+                    )
+                },
+                popExitTransition = {
+                    slideOutOfContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Left,
+                        animationSpec = tween(700)
+                    )
+                }
+            ) {
                 SignInScreen(modifier = modifier, navHostController = navHostController)
             }
-            composable(Screen.SignUp.route) {
+            composable(Screen.SignUp.route,
+                enterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Left,
+                        animationSpec = tween(700)
+                    )
+                },
+                popExitTransition = {
+                    slideOutOfContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Left,
+                        animationSpec = tween(700)
+                    )
+                }
+            ) {
                 SignUpScreen(navHostController = navHostController)
             }
-            composable(Screen.OnBoarding.route) {
+            composable(Screen.OnBoarding.route,
+                enterTransition = {
+                    scaleIn(
+                        animationSpec = tween(500, delayMillis = 90),
+                        initialScale = 0.8f
+                    ) + fadeIn(animationSpec = tween(500, delayMillis = 90))
+                }
+            ) {
                 OnBoardingScreen(navHostController = navHostController)
             }
             composable(Screen.FillData.route) {
                 FillDataScreen(navHostController = navHostController)
             }
-            composable(Screen.Home.route) {
+            composable(Screen.Home.route
+            ) {
                 HomeScreen(navHostController = navHostController)
             }
-            composable(Screen.Explore.route) {
+            composable(Screen.Explore.route
+            ) {
                 ExploreScreen(navHostController = navHostController)
             }
             composable(Screen.Profile.route) {
                 ProfileScreen(navHostController = navHostController)
             }
-            composable(Screen.Thread.route) {
+            composable(Screen.Thread.route,
+                enterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Left,
+                        animationSpec = tween(400)
+                    )
+                }
+            ) {
                 ThreadScreen(navHostController = navHostController)
             }
-            composable(Screen.News.route) {
+            composable(Screen.News.route,
+                enterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Left,
+                        animationSpec = tween(400)
+                    )
+                }
+            ) {
                 NewsScreen(navHostController = navHostController)
             }
-            composable(Screen.MoreThreads.route) {
+            composable(Screen.MoreThreads.route,
+                enterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Left,
+                        animationSpec = tween(400)
+                    )
+                }
+            ) {
                 MoreThreadsScreen(navHostController = navHostController)
             }
-            composable(Screen.MoreNews.route) {
+            composable(Screen.MoreNews.route,
+                enterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Left,
+                        animationSpec = tween(400)
+                    )
+                }
+            ) {
                 MoreNewsScreen(navHostController = navHostController)
             }
             composable(Screen.Chat.route) {
@@ -105,7 +188,32 @@ fun MainJetpack(
             composable(Screen.ChatResult.route) {
                 ChatResultScreen(navHostController = navHostController)
             }
-            composable(Screen.Settings.route) {
+            composable(Screen.Settings.route,
+                enterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Left,
+                        animationSpec = tween(700)
+                    )
+                },
+                exitTransition = {
+                    slideOutOfContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Left,
+                        animationSpec = tween(700)
+                    )
+                },
+                popExitTransition = {
+                    slideOutOfContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Left,
+                        animationSpec = tween(700)
+                    )
+                },
+                popEnterTransition = {
+                    slideIntoContainer(
+                        AnimatedContentTransitionScope.SlideDirection.Left,
+                        animationSpec = tween(700)
+                    )
+                }
+            ) {
                 SettingsScreen(navHostController = navHostController)
             }
             composable(Screen.Edit.route) {

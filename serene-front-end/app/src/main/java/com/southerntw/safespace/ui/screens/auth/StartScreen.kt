@@ -50,9 +50,7 @@ fun StartScreen(
         }
     }, onGuestClicked = {
         navHostController.navigate(Screen.Home.route) {
-            popUpTo(Screen.Home.route) {
-                inclusive = true
-            }
+            popUpTo(0)
         }
     })
 }
@@ -60,23 +58,25 @@ fun StartScreen(
 @Composable
 fun StartContent(modifier: Modifier, onSignInClicked: () -> Unit, onSignUpClicked: () -> Unit, onGuestClicked: () -> Unit) {
     Column(modifier = modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
-        AsyncImage(model = R.drawable.logo, contentDescription = "Safespace logo", modifier = modifier
-            .height(80.dp)
-            .width(80.dp)
-            .padding(top = 6.dp, bottom = 46.dp))
-        Text(text = "Welcome to Safespace", style = MaterialTheme.typography.headlineLarge, modifier = modifier.padding(bottom = 12.dp), color = MaterialTheme.colorScheme.onBackground)
+        Spacer(modifier = Modifier.height(24.dp))
+        AsyncImage(model = R.drawable.logo, contentDescription = "Safespace logo", modifier = Modifier
+            .height(24.dp)
+            .width(24.dp)
+        )
+        Spacer(modifier = Modifier.height(46.dp))
+        Text(text = "Welcome to Safespace", style = MaterialTheme.typography.headlineLarge, modifier = Modifier.padding(bottom = 12.dp), color = MaterialTheme.colorScheme.onBackground)
         Text(text = "A place where you can be yourself", style = MaterialTheme.typography.headlineSmall, color = MaterialTheme.colorScheme.onBackground)
 
         Spacer(Modifier.weight(1F))
 
-        AsyncImage(model = R.drawable.illust_home, contentDescription = "Illustration home", modifier = modifier
+        AsyncImage(model = R.drawable.illust_home, contentDescription = "Illustration home", modifier = Modifier
             .height(379.dp)
             .width(336.dp))
 
         Spacer(Modifier.weight(1F))
 
-        ButtonFilled(modifier = modifier, onClicked = onSignInClicked, text = "Sign In")
-        ButtonOutlined(modifier = modifier, onClicked = onSignUpClicked, text = "Sign Up")
+        ButtonFilled(modifier = Modifier, onClicked = onSignInClicked, text = "Sign In")
+        ButtonOutlined(modifier = Modifier, onClicked = onSignUpClicked, text = "Sign Up")
 
         TextButton(onClick = onGuestClicked) {
             Text(text = "continue as a guest...", style = MaterialTheme.typography.labelSmall, color = AlmostBlack)

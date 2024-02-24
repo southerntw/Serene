@@ -38,10 +38,9 @@ fun FillDataScreen(modifier: Modifier = Modifier, navHostController: NavHostCont
             },
         onSkipClicked = {
             navHostController.navigate(Screen.Home.route) {
-            popUpTo(Screen.Home.route) {
-                inclusive = true
+                popUpTo(0)
             }
-        }}
+        }
     )
 }
 

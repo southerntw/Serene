@@ -1,5 +1,8 @@
 package com.southerntw.safespace.ui.screens.auth
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -30,35 +33,83 @@ import com.southerntw.safespace.ui.composables.ButtonOutlined
 import com.southerntw.safespace.ui.navigation.screen.Screen
 import com.southerntw.safespace.ui.theme.AlmostBlack
 import com.southerntw.safespace.ui.theme.MoodGreen
+import androidx.compose.runtime.*
 
 @Composable
 fun OnBoardingScreen(modifier: Modifier = Modifier, navHostController: NavHostController) {
+    var visible by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        visible = true
+    }
+
     OnBoardingContent(onNextClicked = {
         navHostController.navigate(Screen.FillData.route)
-    })
+    },
+        visible = visible
+    )
 }
 
 @Composable
-fun OnBoardingContent(modifier: Modifier = Modifier, onNextClicked: () -> Unit) {
+fun OnBoardingContent(modifier: Modifier = Modifier, onNextClicked: () -> Unit, visible: Boolean) {
     Box(
         modifier
             .fillMaxSize()
             .background(MoodGreen)
     ) {
         Column(modifier = modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(text = "We welcome you to Safespace!", style = MaterialTheme.typography.bodyLarge.copy(
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
-                lineHeight = 24.sp
-            ),
-                modifier = modifier.align(Alignment.CenterHorizontally).padding(bottom = 8.dp)
-            )
+            AnimatedVisibility(
+                visible = visible,
+                enter = fadeIn(
+                    animationSpec = tween(
+                        durationMillis = 1000,
+                        delayMillis = 1000
+                    )
+                )
+            ) {
+                Text(
+                    text = "We welcome you to Safespace!",
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        lineHeight = 24.sp
+                    ),
+                    modifier = Modifier.align(Alignment.CenterHorizontally).padding(bottom = 8.dp)
+                )
+            }
 
-            Text(text = "Before using the app, we'd like you to fill some additional informations about yourself to make your experience better!", style = MaterialTheme.typography.bodyLarge,
-                modifier = modifier.align(Alignment.CenterHorizontally).padding(bottom = 52.dp),
-                textAlign = TextAlign.Center
-            )
-            ButtonOnboard(modifier = modifier, onClicked = onNextClicked, text = "Okay! Let's go.")
+            AnimatedVisibility(
+                visible = visible,
+                enter = fadeIn(
+                    animationSpec = tween(
+                        durationMillis = 1000,
+                        delayMillis = 3000
+                    )
+                )
+            ) {
+                Text(
+                    text = "Before using the app, we'd like you to fill some additional informations about yourself to make your experience better!",
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.align(Alignment.CenterHorizontally).padding(bottom = 52.dp),
+                    textAlign = TextAlign.Center
+                )
+            }
+
+            AnimatedVisibility(
+                visible = visible,
+                enter = fadeIn(
+                    animationSpec = tween(
+                        durationMillis = 1000,
+                        delayMillis = 5000
+                    )
+                )
+            ) {
+                ButtonOnboard(
+                    modifier = Modifier,
+                    onClicked = onNextClicked,
+                    text = "Okay! Let's go."
+                )
+            }
         }
     }
 }

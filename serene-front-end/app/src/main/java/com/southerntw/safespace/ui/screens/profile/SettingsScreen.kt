@@ -27,9 +27,7 @@ fun SettingsScreen(modifier: Modifier = Modifier, navHostController: NavHostCont
             }
             SettingsClickable(icon = R.drawable.icon_logout, iconColor = MoodRed, settingsName = "Logout from your account") {
                 navHostController.navigate(Screen.Start.route) {
-                    popUpTo(Screen.Settings.route) {
-                        inclusive = true
-                    }
+                    popUpTo(0)
                 }
             }
         }
