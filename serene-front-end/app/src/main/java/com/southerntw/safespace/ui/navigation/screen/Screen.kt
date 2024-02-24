@@ -8,6 +8,20 @@ sealed class Screen(val route: String) {
     object Home : Screen("home")
     object Explore : Screen("explore")
     object Profile : Screen("profile")
+
+    // TODO: Routes?
     object Thread : Screen("thread")
     object News : Screen("news")
+
+    object MoreThreads : Screen("morethreads")
+    object MoreNews : Screen("morenews")
+
+    object Chat : Screen("chat")
+    object ChatResult : Screen("chatresult")
+
+    object Settings : Screen("settings")
+    object Edit : Screen("edit")
+
+    object FillData : Screen("filldata")
+
 }

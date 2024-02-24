@@ -12,6 +12,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.southerntw.safespace.ui.theme.AlmostBlack
+import com.southerntw.safespace.ui.theme.DarkGreen
+import com.southerntw.safespace.ui.theme.DarkestGray
 import com.southerntw.safespace.ui.theme.White
 
 @Composable
@@ -25,6 +27,23 @@ fun ButtonFilled(modifier: Modifier, onClicked: () -> Unit, text: String) {
             contentColor = AlmostBlack,
             disabledContainerColor = AlmostBlack,
             disabledContentColor = AlmostBlack
+        )
+    ) {
+        Text(text = text, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)
+    }
+}
+
+@Composable
+fun ButtonOnboard(modifier: Modifier, onClicked: () -> Unit, text: String) {
+    Button(onClick = onClicked, modifier = modifier
+        .width(288.dp)
+        .height(56.dp)
+        .padding(bottom = 12.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = DarkestGray,
+            contentColor = DarkestGray,
+            disabledContainerColor = DarkestGray,
+            disabledContentColor = DarkestGray
         )
     ) {
         Text(text = text, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)

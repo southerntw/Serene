@@ -1,11 +1,8 @@
 package com.southerntw.safespace
 
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -17,15 +14,22 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.southerntw.safespace.ui.composables.BottomBar
 import com.southerntw.safespace.ui.navigation.screen.Screen
+import com.southerntw.safespace.ui.screens.auth.FillDataScreen
 import com.southerntw.safespace.ui.screens.auth.OnBoardingScreen
+import com.southerntw.safespace.ui.screens.profile.SettingsScreen
 import com.southerntw.safespace.ui.screens.auth.SignInScreen
 import com.southerntw.safespace.ui.screens.auth.SignUpScreen
 import com.southerntw.safespace.ui.screens.auth.StartScreen
 import com.southerntw.safespace.ui.screens.explore.ExploreScreen
+import com.southerntw.safespace.ui.screens.explore.MoreNewsScreen
+import com.southerntw.safespace.ui.screens.explore.MoreThreadsScreen
+import com.southerntw.safespace.ui.screens.explore.NewsScreen
 import com.southerntw.safespace.ui.screens.explore.ThreadScreen
 import com.southerntw.safespace.ui.screens.home.HomeScreen
+import com.southerntw.safespace.ui.screens.profile.ChatResultScreen
+import com.southerntw.safespace.ui.screens.profile.ChatScreen
 import com.southerntw.safespace.ui.screens.profile.ProfileScreen
-import com.southerntw.safespace.ui.theme.SafespaceTheme
+import com.southerntw.safespace.ui.screens.profile.SettingsEditScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -51,10 +55,11 @@ fun MainJetpack(
             modifier = Modifier.padding(
                 top = if (
                     currentRoute == Screen.SignIn.route ||
-                    currentRoute == Screen.SignUp.route
+                    currentRoute == Screen.SignUp.route ||
+                    currentRoute == Screen.OnBoarding.route
                 ) 0.dp else innerPadding.calculateTopPadding(),
                 bottom = if (
-                    false
+                    currentRoute == Screen.OnBoarding.route
                 ) 0.dp else innerPadding.calculateBottomPadding(),
             )
         ) {
@@ -70,6 +75,9 @@ fun MainJetpack(
             composable(Screen.OnBoarding.route) {
                 OnBoardingScreen(navHostController = navHostController)
             }
+            composable(Screen.FillData.route) {
+                FillDataScreen(navHostController = navHostController)
+            }
             composable(Screen.Home.route) {
                 HomeScreen(navHostController = navHostController)
             }
@@ -81,6 +89,27 @@ fun MainJetpack(
             }
             composable(Screen.Thread.route) {
                 ThreadScreen(navHostController = navHostController)
+            }
+            composable(Screen.News.route) {
+                NewsScreen(navHostController = navHostController)
+            }
+            composable(Screen.MoreThreads.route) {
+                MoreThreadsScreen(navHostController = navHostController)
+            }
+            composable(Screen.MoreNews.route) {
+                MoreNewsScreen(navHostController = navHostController)
+            }
+            composable(Screen.Chat.route) {
+                ChatScreen(navHostController = navHostController)
+            }
+            composable(Screen.ChatResult.route) {
+                ChatResultScreen(navHostController = navHostController)
+            }
+            composable(Screen.Settings.route) {
+                SettingsScreen(navHostController = navHostController)
+            }
+            composable(Screen.Edit.route) {
+                SettingsEditScreen(navHostController = navHostController)
             }
         }
     }

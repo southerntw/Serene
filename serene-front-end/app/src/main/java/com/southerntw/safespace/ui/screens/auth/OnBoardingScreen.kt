@@ -1,93 +1,64 @@
 package com.southerntw.safespace.ui.screens.auth
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.southerntw.safespace.R
 import com.southerntw.safespace.ui.composables.AuthTextField
 import com.southerntw.safespace.ui.composables.ButtonFilled
+import com.southerntw.safespace.ui.composables.ButtonOnboard
 import com.southerntw.safespace.ui.composables.ButtonOutlined
 import com.southerntw.safespace.ui.navigation.screen.Screen
 import com.southerntw.safespace.ui.theme.AlmostBlack
+import com.southerntw.safespace.ui.theme.MoodGreen
 
 @Composable
 fun OnBoardingScreen(modifier: Modifier = Modifier, navHostController: NavHostController) {
-    ProfileEditContent(modifier = Modifier,
-        userAvatar = R.drawable.mock_avatar,
-        userName = "Salazar Matilda",
-        about = "Lorem Ipsum",
-        birthdate = "12/12/2001",
-        gender = "Female",
-        onAboutChanged = {},
-        onGenderChanged = {},
-        onBirthdateChanged = {},
-        onSaveClicked = {
-                // TODO: Add Data saved Dialog
-            },
-        onSkipClicked = {
-            navHostController.navigate(Screen.Home.route) {
-            popUpTo(Screen.Home.route) {
-                inclusive = true
-            }
-        }}
-    )
+    OnBoardingContent(onNextClicked = {
+        navHostController.navigate(Screen.FillData.route)
+    })
 }
 
 @Composable
-fun ProfileEditContent(modifier: Modifier,
-                       userAvatar: Int,
-                       userName: String,
-                       about: String,
-                       birthdate: String,
-                       gender: String,
-                       onAboutChanged: (String) -> Unit,
-                       onBirthdateChanged: (String) -> Unit,
-                       onGenderChanged: (String) -> Unit,
-                       onSaveClicked: () -> Unit,
-                       onSkipClicked: () -> Unit,
-) {
-    Column(modifier= modifier.fillMaxSize().padding(horizontal = 16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-        Spacer(modifier.padding(top = 34.dp))
+fun OnBoardingContent(modifier: Modifier = Modifier, onNextClicked: () -> Unit) {
+    Box(
+        modifier
+            .fillMaxSize()
+            .background(MoodGreen)
+    ) {
+        Column(modifier = modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(text = "We welcome you to Safespace!", style = MaterialTheme.typography.bodyLarge.copy(
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                lineHeight = 24.sp
+            ),
+                modifier = modifier.align(Alignment.CenterHorizontally).padding(bottom = 8.dp)
+            )
 
-        AsyncImage(model = userAvatar, contentDescription = "User Avatar", modifier = modifier
-            .size(120.dp)
-        )
-
-        Spacer(modifier.padding(bottom = 24.dp))
-
-        Text(userName, style = MaterialTheme.typography.headlineMedium, color = AlmostBlack, modifier = modifier.padding(bottom = 32.dp))
-
-        AuthTextField(
-            label = "About you",
-            input = about,
-            onInputChanged = onAboutChanged,
-            multipleLines = true
-        )
-
-        AuthTextField(
-            label = "Birthdate",
-            input = birthdate,
-            onInputChanged = onBirthdateChanged
-        )
-
-        AuthTextField(
-            label = "Gender",
-            input = gender,
-            onInputChanged = onGenderChanged
-        )
-
-        ButtonFilled(modifier = modifier.fillMaxWidth(), onClicked = onSaveClicked, text = "Save Data")
-        ButtonOutlined(modifier = modifier.fillMaxWidth(), onClicked = onSkipClicked, text = "Skip For Now")
+            Text(text = "Before using the app, we'd like you to fill some additional informations about yourself to make your experience better!", style = MaterialTheme.typography.bodyLarge,
+                modifier = modifier.align(Alignment.CenterHorizontally).padding(bottom = 52.dp),
+                textAlign = TextAlign.Center
+            )
+            ButtonOnboard(modifier = modifier, onClicked = onNextClicked, text = "Okay! Let's go.")
+        }
     }
 }

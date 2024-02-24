@@ -13,14 +13,20 @@ val Pink40 = Color(0xFF7D5260)
 val AlmostBlack = Color(0xFF282828)
 val GrayText = Color(0xFFF0F0F0)
 val Gray02 = Color(0xFF4F4F4F)
+val DarkestGray = Color(0xFF666666)
 val GrayBackground = Color(0xFFDAD7D7)
 val GrayOnBackground = Color(0xFF5A5A5A)
 
 val Lime02 = Color(0xFFABDEBD)
 val Lime01 = Color(0xFFE1F6E8)
+val DarkGreen = Color(0xFF219653)
 
 val White = Color(0xFFFFFFFF)
 
 val MoodGreen = Color(0xFF6FCF97)
 val MoodGrey = Color(0xFF828282)
 val MoodRed = Color(0xFFEB5757)
+
+val chatGreen = Color(0xFF4CCE79)
+val chatBlack = Color(0xFF282828)
+val chatForeground = Color(0xFFF0F0F0)

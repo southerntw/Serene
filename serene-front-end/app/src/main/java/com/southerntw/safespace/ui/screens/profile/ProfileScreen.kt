@@ -24,8 +24,16 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.southerntw.safespace.R
+import com.southerntw.safespace.ui.composables.MoodBoard
 import com.southerntw.safespace.ui.composables.MoodDisplay
+import com.southerntw.safespace.ui.navigation.screen.Screen
 import com.southerntw.safespace.ui.theme.AlmostBlack
+
+val dummyMood = intArrayOf(
+    1, 2, 3, 1, 2, 3, 1,
+    2, 3, 2, 1, 2, 3, 3,
+    1, 2, 3, 3, 2, 1, 1
+)
 
 @Composable
 fun ProfileScreen(modifier: Modifier = Modifier, navHostController: NavHostController) {
@@ -37,21 +45,15 @@ fun ProfileScreen(modifier: Modifier = Modifier, navHostController: NavHostContr
         userJoinYear = "2024",
         userAbout = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
         userMood = "Excellent",
-        onSettingsClicked = {}
+        onSettingsClicked = {
+            navHostController.navigate(Screen.Settings.route)
+        }
     )
 }
 
 @Composable
 fun ProfileContent(modifier: Modifier = Modifier, onSettingsClicked: () -> Unit, userAvatar: Int, userName: String, userGender: String, userAge: String, userJoinYear: String, userAbout: String, userMood: String) {
     Box(modifier.fillMaxSize()) {
-        IconButton(onClick = { onSettingsClicked() }, modifier = modifier.align(Alignment.TopEnd).padding(top = 12.dp)) {
-            Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.icon_setting),
-                contentDescription = "Setting Button",
-                tint = AlmostBlack,
-                modifier = Modifier.size(24.dp)
-            )
-        }
         Column(
             modifier = modifier
                 .fillMaxWidth()
@@ -83,11 +85,15 @@ fun ProfileContent(modifier: Modifier = Modifier, onSettingsClicked: () -> Unit,
                 MoodDisplay(userMood = "Excellent")
 
                 Spacer(modifier.height(24.dp))
+                // TODO: Check in other devices.
                 Text(
-                    "Mood History",
+                    "Moods Within Last 21 Days",
                     style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
                     color = AlmostBlack
                 )
+                Box(modifier.fillMaxWidth()) {
+                    MoodBoard(moodLevel = dummyMood)
+                }
 
                 Spacer(modifier.height(24.dp))
                 Text(
@@ -102,6 +108,16 @@ fun ProfileContent(modifier: Modifier = Modifier, onSettingsClicked: () -> Unit,
                     color = AlmostBlack
                 )
             }
+        }
+        IconButton(onClick = onSettingsClicked, modifier = modifier
+            .align(Alignment.TopEnd)
+            .padding(top = 12.dp)) {
+            Icon(
+                imageVector = ImageVector.vectorResource(id = R.drawable.icon_setting),
+                contentDescription = "Setting Button",
+                tint = AlmostBlack,
+                modifier = Modifier.size(24.dp)
+            )
         }
     }
 }

@@ -35,9 +35,15 @@ fun ExploreScreen(modifier: Modifier = Modifier, navHostController: NavHostContr
         onThreadClicked = {
             navHostController.navigate(Screen.Thread.route)
         },
-        onNewsClicked = {},
-        onMoreNewsClicked = {},
-        onMoreThreadClicked = {})
+        onNewsClicked = {
+            navHostController.navigate(Screen.News.route)
+        },
+        onMoreNewsClicked = {
+            navHostController.navigate(Screen.MoreNews.route)
+        },
+        onMoreThreadClicked = {
+            navHostController.navigate(Screen.MoreThreads.route)
+        })
 }
 
 @Composable
@@ -82,7 +88,7 @@ fun ExploreContent(modifier: Modifier, onTagClicked: () -> Unit, onThreadClicked
                     "See more >>",
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.secondary,
-                    modifier = modifier.clickable { onMoreThreadClicked })
+                    modifier = modifier.clickable { onMoreThreadClicked() })
             }
             Column {
                 ThreadEntry(

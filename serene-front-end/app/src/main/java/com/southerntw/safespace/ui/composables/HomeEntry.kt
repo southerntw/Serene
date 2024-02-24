@@ -1,5 +1,6 @@
 package com.southerntw.safespace.ui.composables
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,7 +29,7 @@ fun HomeEntry(modifier: Modifier = Modifier, headerImage: Int,
               entryDescription: String,
               onClicked: () -> Unit
 ) {
-    Box(modifier.width(336.dp).height(161.dp)) {
+    Box(modifier.width(336.dp).height(161.dp).clickable { onClicked() }) {
         Column(verticalArrangement = Arrangement.spacedBy(8.dp), modifier = modifier.fillMaxSize().padding(horizontal = 12.dp)) {
             AsyncImage(model = headerImage, contentDescription = entryName, modifier = modifier.width(336.dp).height(97.dp))
             Text(entryName, style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Medium), color = AlmostBlack)
