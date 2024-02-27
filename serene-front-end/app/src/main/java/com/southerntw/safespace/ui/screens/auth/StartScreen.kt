@@ -18,10 +18,14 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.southerntw.safespace.R
@@ -30,12 +34,27 @@ import com.southerntw.safespace.ui.composables.ButtonOutlined
 import com.southerntw.safespace.ui.navigation.screen.Screen
 import com.southerntw.safespace.ui.theme.AlmostBlack
 import com.southerntw.safespace.ui.theme.White
+import com.southerntw.safespace.viewmodel.AuthViewModel
 
 @Composable
 fun StartScreen(
     modifier: Modifier = Modifier,
+    viewModel: AuthViewModel = hiltViewModel(),
     navHostController: NavHostController
 ) {
+    val userExist by viewModel.userExist
+
+    SideEffect {
+        viewModel.tryUserExist()
+    }
+    LaunchedEffect(userExist) {
+        if (userExist) {
+            navHostController.navigate(Screen.Home.route) {
+                popUpTo(0)
+            }
+        }
+    }
+
     StartContent(modifier = modifier, onSignInClicked = {
         navHostController.navigate(Screen.SignIn.route) {
             popUpTo(Screen.SignIn.route) {

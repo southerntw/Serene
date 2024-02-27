@@ -5,7 +5,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-object TutorealApiConfig {
+object SafespaceApiConfig {
     fun getApiService(): SafespaceApiService {
         val loggingInterceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
         val client = OkHttpClient.Builder()
@@ -13,7 +13,7 @@ object TutorealApiConfig {
             .build()
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("localhost:3001")
+            .baseUrl("http://192.168.1.12:3000/api/v1/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()

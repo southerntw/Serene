@@ -41,8 +41,6 @@ fun MainJetpack(
     modifier: Modifier = Modifier,
     navHostController: NavHostController = rememberNavController()
 ) {
-    Greeting("Android")
-
     val navBackStackEntry by navHostController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 

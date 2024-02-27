@@ -70,8 +70,8 @@ dependencies {
 
     // Hilt Dependency Injection
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
-    kapt("com.google.dagger:hilt-android-compiler:2.44")
-    implementation("com.google.dagger:hilt-android:2.44")
+    kapt("com.google.dagger:hilt-android-compiler:2.49")
+    implementation("com.google.dagger:hilt-android:2.49")
 
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")

@@ -1,5 +1,6 @@
 package com.southerntw.safespace.ui.screens.auth
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -12,38 +13,93 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.southerntw.safespace.R
 import com.southerntw.safespace.ui.composables.AuthTextField
 import com.southerntw.safespace.ui.composables.ButtonFilled
 import com.southerntw.safespace.ui.navigation.screen.Screen
+import com.southerntw.safespace.util.AuthUiState
+import com.southerntw.safespace.viewmodel.AuthViewModel
 
 @Composable
 fun SignUpScreen(modifier: Modifier = Modifier,
+                 viewModel: AuthViewModel = hiltViewModel(),
                  navHostController: NavHostController
 ) {
-    SignUpContent(
-        modifier = modifier,
-        onSignUpClicked = {
-            navHostController.navigate(Screen.OnBoarding.route) {
-                popUpTo(Screen.OnBoarding.route) {
-                    inclusive = true
+    val name by viewModel.nameRegister
+    val email by viewModel.emaiLRegister
+    val password by viewModel.passwordRegister
+    val confirmPassword by viewModel.confirmPasswordRegister
+
+    val context = LocalContext.current
+
+    viewModel.registerResponse.collectAsState(initial = AuthUiState.Idle).value.let { uiState ->
+        when (uiState) {
+            is AuthUiState.Idle -> {
+                SignUpContent(
+                    modifier = modifier,
+                    onSignUpClicked = viewModel::register,
+                    inputName = name,
+                    inputEmail = email,
+                    inputPassword = password,
+                    inputConfirmPassword = confirmPassword,
+                    onNameChanged = viewModel::changeNameRegister,
+                    onEmailChanged = viewModel::changeEmailRegister,
+                    onPasswordChanged = viewModel::changePasswordRegister,
+                    onConfirmPasswordChanged = viewModel::changeConfirmPasswordRegister,
+                )
+            }
+            is AuthUiState.Load -> {
+                SignUpContent(
+                    modifier = modifier.alpha(0.7F),
+                    onSignUpClicked = viewModel::register,
+                    inputName = "",
+                    inputEmail = "",
+                    inputPassword = "",
+                    inputConfirmPassword = "",
+                    onNameChanged = {},
+                    onEmailChanged = {},
+                    onPasswordChanged = {},
+                    onConfirmPasswordChanged = {}
+                )
+            }
+            is AuthUiState.Success -> {
+                LaunchedEffect(key1 = true) {
+                    Toast.makeText(context, "Register Successful", Toast.LENGTH_SHORT).show()
+                    navHostController.navigate(Screen.Start.route) {
+                        popUpTo(0)
+                    }
                 }
             }
-        },
-        inputName = "",
-        inputEmail = "",
-        inputPassword = "",
-        inputConfirmPassword = "",
-        onNameChanged = {},
-        onEmailChanged = {},
-        onPasswordChanged = {},
-        onConfirmPasswordChanged = {},
-    )
+            is AuthUiState.Failure -> {
+                SignUpContent(
+                    modifier = modifier,
+                    onSignUpClicked = viewModel::register,
+                    inputName = name,
+                    inputEmail = email,
+                    inputPassword = password,
+                    inputConfirmPassword = confirmPassword,
+                    onNameChanged = viewModel::changeNameRegister,
+                    onEmailChanged = viewModel::changeEmailRegister,
+                    onPasswordChanged = viewModel::changePasswordRegister,
+                    onConfirmPasswordChanged = viewModel::changeConfirmPasswordRegister,
+                )
+                LaunchedEffect(key1 = true) {
+                    Toast.makeText(context, "Register Gagal", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
 }
 
 @Composable
@@ -80,12 +136,14 @@ fun SignUpContent(
             AuthTextField(
                 label = "Password",
                 input = inputPassword,
-                onInputChanged = onPasswordChanged
+                onInputChanged = onPasswordChanged,
+                isPassword = true
             )
             AuthTextField(
                 label = "Confirm Password",
                 input = inputConfirmPassword,
-                onInputChanged = onConfirmPasswordChanged
+                onInputChanged = onConfirmPasswordChanged,
+                isPassword = true
             )
             ButtonFilled(modifier = modifier.fillMaxWidth(), onClicked = onSignUpClicked, text = "Sign Up")
         }
