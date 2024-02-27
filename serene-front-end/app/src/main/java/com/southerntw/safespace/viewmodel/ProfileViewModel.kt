@@ -20,12 +20,25 @@ class ProfileViewModel @Inject constructor(private val repository: Repository) :
         }
     }
 
+    fun tryUserToken() {
+        viewModelScope.launch {
+            repository.getUserToken().collect {
+                _userToken.value = it
+            }
+        }
+    }
+
     private val _userExist = mutableStateOf(false)
     val userExist: State<Boolean> get() = _userExist
+
+    private val _userToken = mutableStateOf("")
 
     fun deleteSession() {
         viewModelScope.launch {
             repository.deleteSession()
         }
     }
+
+    // Profile
+
 }

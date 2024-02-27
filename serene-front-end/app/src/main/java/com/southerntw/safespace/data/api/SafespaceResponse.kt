@@ -41,3 +41,162 @@ data class LoginData (
     @SerializedName("access_token")
     var token : String? = null
 )
+
+// Profile Responses
+data class ProfileResponse (
+    @SerializedName("success")
+    var success : Boolean? = null,
+
+    @SerializedName("data")
+    var loginData : ProfileData? = null,
+
+    @SerializedName("errors")
+    var error : ErrorData? = null
+)
+
+data class ProfileData (
+    @SerializedName("id" )
+    var id : String? = null,
+
+    @SerializedName("name" )
+    var name : String? = null,
+
+    @SerializedName("email")
+    var email : String? = null,
+
+    @SerializedName("avatar")
+    var avatar : String? = null,
+
+    @SerializedName("about")
+    var about : String? = null,
+
+    @SerializedName("birthdate")
+    var birthdate : String? = null
+)
+
+data class EditProfileResponse (
+    @SerializedName("success")
+    var success : Boolean? = null,
+
+    @SerializedName("data")
+    var loginData : EditProfileData? = null,
+
+    @SerializedName("errors")
+    var error : ErrorData? = null
+)
+
+data class EditProfileData (
+    @SerializedName("id" )
+    var id : String? = null,
+
+    @SerializedName("name" )
+    var name : String? = null,
+
+    @SerializedName("email")
+    var email : String? = null,
+
+    @SerializedName("avatar")
+    var avatar : String? = null,
+
+    @SerializedName("about")
+    var about : String? = null,
+
+    @SerializedName("birthdate")
+    var birthdate : String? = null
+)
+
+// Thread Responses
+data class ThreadsResponse (
+    @SerializedName("success")
+    var success : Boolean? = null,
+
+    @SerializedName("data")
+    var loginData : List<ThreadsData>? = null,
+
+    @SerializedName("errors")
+    var error : ErrorData? = null
+)
+
+data class ThreadResponse (
+    @SerializedName("success")
+    var success : Boolean? = null,
+
+    @SerializedName("data")
+    var loginData : ThreadsData? = null,
+
+    @SerializedName("errors")
+    var error : ErrorData? = null
+)
+
+data class ThreadsData (
+    @SerializedName("id")
+    var id : Int? = null,
+
+    @SerializedName("text")
+    var text : String? = null,
+
+    @SerializedName("tag")
+    var tag : String? = null,
+
+    @SerializedName("threadStarter")
+    var threadStarter : String? = null
+)
+
+data class PostThreadResponse (
+    @SerializedName("success")
+    var success : Boolean? = null,
+
+    @SerializedName("data")
+    var loginData : PostThreadData? = null,
+
+    @SerializedName("errors")
+    var error : ErrorData? = null
+)
+
+data class PostThreadData (
+    @SerializedName("text")
+    var text : String? = null,
+
+    @SerializedName("tag")
+    var tag : String? = null,
+
+    @SerializedName("threadStarter")
+    var threadStarter : String? = null
+)
+
+// News Responses
+data class NewsResponse (
+    @SerializedName("success")
+    var success : Boolean? = null,
+
+    @SerializedName("data")
+    var loginData : List<NewsData>? = null,
+
+    @SerializedName("errors")
+    var error : ErrorData? = null
+)
+
+data class NewsData (
+    @SerializedName("id")
+    var id : Int? = null,
+
+    @SerializedName("writer")
+    var text : String? = null,
+
+    @SerializedName("content")
+    var tag : String? = null,
+
+    @SerializedName("category")
+    var threadStarter : String? = null
+)
+
+data class ANewsResponse (
+    @SerializedName("success")
+    var success : Boolean? = null,
+
+    @SerializedName("data")
+    var loginData : NewsData? = null,
+
+    @SerializedName("errors")
+    var error : ErrorData? = null
+)
