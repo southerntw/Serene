@@ -34,20 +34,19 @@ router.use(
 router.post("/bot/chat", verifyToken, chatValidator, bot.sendChat);
 router.get("/bot/encourage", verifyToken, bot.encourage);
 
-router.put("/user", verifyToken, editProfileValidator, user.editUser);
-router.get("/user/:id", userIdValidator, user.getUser);
+router.put("/user", verifyToken, editProfileValidator, user.editUser); // Done
+router.get("/user/:id", userIdValidator, user.getUser); // Done
 router.get("/user/mood/:id", verifyToken, userIdValidator, mood.getMood);
 router.post("/user/mood", verifyToken, addMoodValidator, mood.addMood);
 
-router.post("/auth/login", loginValidator, auth.login);
-router.post("/auth/register", registerValidator, auth.register);
+router.post("/auth/login", loginValidator, auth.login); // Done
+router.post("/auth/register", registerValidator, auth.register); // Done
 
-router.get("/threads", thread.getThreads);
-router.get("/thread/:id", getIdValidator, thread.getThread);
-router.post("/thread", verifyToken, postThreadValidator, thread.postThread);
+router.get("/threads", thread.getThreads); // Done [BUTUH TITLE]
+router.get("/thread/:id", getIdValidator, thread.getThread); // Done [TITLE]
+router.post("/thread", verifyToken, postThreadValidator, thread.postThread);  // Done [TITLE]
 
-router.get("/news", news.getNews);
-router.get("/news/:id", getIdValidator, news.readNews);
+router.get("/news", news.getNews); // Done
+router.get("/news/:id", getIdValidator, news.readNews); // Done
 
 export default router;
-

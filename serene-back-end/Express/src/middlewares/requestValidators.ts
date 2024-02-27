@@ -44,7 +44,7 @@ export const postThreadValidator = [
   body("text", "Text should not be empty").not().isEmpty(),
   body("tag", "Tag should a string").isString().optional(),
   body("threadStarter", "threadStarter should not be empty").not().isEmpty(),
-  body("threadStarter", "threadStarter must be numeric").isNumeric(),
+  body("threadStarter", "threadStarter must be string").isString(),
 ];
 
 export const editProfileValidator = [

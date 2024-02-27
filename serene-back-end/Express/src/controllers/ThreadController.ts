@@ -64,7 +64,9 @@ export class ThreadController {
       res.status(201).json({
         success: true,
         data: {
-          newThread,
+          text: newThread.text,
+          tag: newThread.tag,
+          threadStarter: newThread.threadStarter
         },
       });
       return;
