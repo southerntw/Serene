@@ -3,6 +3,7 @@ import { users } from "./users";
 
 export const threads = pgTable("threads", {
   id: serial("id").primaryKey(),
+  title: varchar("title").notNull(),
   text: varchar("text").notNull(),
   tag: varchar("tag"),
   threadStarter: uuid("thread_starter").references(() => users.id),

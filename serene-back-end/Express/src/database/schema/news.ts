@@ -9,6 +9,7 @@ import {
 
 export const news = pgTable("news", {
   id: serial("id").primaryKey(),
+  title: varchar("title").notNull(),
   writer: varchar("writer").notNull(),
   content: varchar("content").notNull(),
   category: varchar("category").notNull(),

@@ -55,6 +55,7 @@ export class ThreadController {
     }
     const data = matchedData(req);
     const newThread: NewThread = {
+      title: data.title,
       text: data.text,
       tag: data.tag,
       threadStarter: data.threadStarter,
@@ -64,9 +65,10 @@ export class ThreadController {
       res.status(201).json({
         success: true,
         data: {
+          title: data.title,
           text: newThread.text,
           tag: newThread.tag,
-          threadStarter: newThread.threadStarter
+          threadStarter: newThread.threadStarter,
         },
       });
       return;

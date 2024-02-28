@@ -41,6 +41,7 @@ export const addMoodValidator = [
 ];
 
 export const postThreadValidator = [
+  body("title", "Title should not be empty").not().isEmpty(),
   body("text", "Text should not be empty").not().isEmpty(),
   body("tag", "Tag should a string").isString().optional(),
   body("threadStarter", "threadStarter should not be empty").not().isEmpty(),
