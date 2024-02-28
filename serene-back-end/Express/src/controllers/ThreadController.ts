@@ -8,8 +8,17 @@ import ValidationError from "../errors/ValidationError";
 
 export class ThreadController {
   public async getThreads(_req: Request, res: Response) {
+    const page = req.query.page ? parseInt(req.query.page as string) : 1;
+    const limit = 10; // Number of news threads per page
+    const offset = (page - 1) * limit;
+
+
     try {
-      const forumThreads = await db.select().from(threads);
+      const forumThreads = await 
+      db.select()
+        .from(threads)
+        .limit(limit)
+        .offset(offset);
       res.json({ success: true, data: forumThreads });
       return;
     } catch (err) {

@@ -6,9 +6,18 @@ import { validationResult, Result } from "express-validator";
 import BadRequestError from "../errors/BadRequestError";
 
 export class NewsController {
-  public async getNews(_req: Request, res: Response) {
+  public async getNews(req: Request, res: Response) {
+    const page = req.query.page ? parseInt(req.query.page as string) : 1;
+    const limit = 10; // Number of news threads per page
+    const offset = (page - 1) * limit;
+
     try {
-      const newsThreads = await db.select().from(news);
+      const newsThreads = await db
+        .select()
+        .from(news)
+        .limit(limit)
+        .offset(offset);
+
       res.json({ success: true, data: newsThreads });
       return;
     } catch (err) {
