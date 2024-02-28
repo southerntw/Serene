@@ -48,7 +48,7 @@ data class ProfileResponse (
     var success : Boolean? = null,
 
     @SerializedName("data")
-    var loginData : ProfileData? = null,
+    var profileData : ProfileData? = null,
 
     @SerializedName("errors")
     var error : ErrorData? = null
@@ -79,7 +79,7 @@ data class EditProfileResponse (
     var success : Boolean? = null,
 
     @SerializedName("data")
-    var loginData : EditProfileData? = null,
+    var profileData : EditProfileData? = null,
 
     @SerializedName("errors")
     var error : ErrorData? = null
@@ -111,7 +111,7 @@ data class ThreadsResponse (
     var success : Boolean? = null,
 
     @SerializedName("data")
-    var loginData : List<ThreadsData>? = null,
+    var threadData : List<ThreadsData>,
 
     @SerializedName("errors")
     var error : ErrorData? = null
@@ -122,7 +122,7 @@ data class ThreadResponse (
     var success : Boolean? = null,
 
     @SerializedName("data")
-    var loginData : ThreadsData? = null,
+    var threadData : ThreadsData? = null,
 
     @SerializedName("errors")
     var error : ErrorData? = null
@@ -147,7 +147,7 @@ data class PostThreadResponse (
     var success : Boolean? = null,
 
     @SerializedName("data")
-    var loginData : PostThreadData? = null,
+    var threadData : PostThreadData? = null,
 
     @SerializedName("errors")
     var error : ErrorData? = null
@@ -170,7 +170,7 @@ data class NewsResponse (
     var success : Boolean? = null,
 
     @SerializedName("data")
-    var loginData : List<NewsData>? = null,
+    var newsData : List<NewsData>,
 
     @SerializedName("errors")
     var error : ErrorData? = null
@@ -195,7 +195,7 @@ data class ANewsResponse (
     var success : Boolean? = null,
 
     @SerializedName("data")
-    var loginData : NewsData? = null,
+    var newsData : NewsData? = null,
 
     @SerializedName("errors")
     var error : ErrorData? = null

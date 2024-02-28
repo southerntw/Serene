@@ -13,8 +13,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ThreadsViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
-    fun getThreads(): Flow<PagingData<NewsData>> =
+    fun getThreads(): Flow<PagingData<ThreadsData>> =
+        repository.getThreads().cachedIn(viewModelScope)
+
+    fun getNews(): Flow<PagingData<NewsData>> =
         repository.getNews().cachedIn(viewModelScope)
-
-
 }

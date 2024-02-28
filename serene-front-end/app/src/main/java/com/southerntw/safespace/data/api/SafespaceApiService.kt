@@ -22,7 +22,9 @@ interface SafespaceApiService {
 
     // Threads
     @GET("threads")
-    suspend fun getThreads(): ThreadsResponse
+    suspend fun getThreads(
+        @Query("page") page: Int
+    ): ThreadsResponse
 
     @GET("thread/{id}")
     suspend fun getThread(
@@ -37,7 +39,9 @@ interface SafespaceApiService {
 
     // News
     @GET("news")
-    suspend fun getNews(): NewsResponse
+    suspend fun getNews(
+        @Query("page") page: Int
+    ): NewsResponse
 
     @GET("news/{id}")
     suspend fun getANews(

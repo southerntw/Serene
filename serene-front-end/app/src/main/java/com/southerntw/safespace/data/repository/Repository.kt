@@ -2,8 +2,12 @@ package com.southerntw.safespace.data.repository
 
 import android.content.Context
 import android.util.Log
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
 import com.southerntw.safespace.data.api.AuthResponse
 import com.southerntw.safespace.data.api.SafespaceApiService
+import com.southerntw.safespace.data.pagingsource.NewsPagingSource
+import com.southerntw.safespace.data.pagingsource.ThreadsPagingSource
 import com.southerntw.safespace.data.preferences.SessionPreferences
 import com.southerntw.safespace.util.AuthUiState
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -36,6 +40,20 @@ class Repository @Inject constructor(
     suspend fun deleteSession() {
         sessionPreferences.deleteSession()
     }
+
+    fun getThreads() = Pager(
+        config = PagingConfig(
+            pageSize = 20,
+        ),
+        pagingSourceFactory = { ThreadsPagingSource(safespaceApiService) }
+    ).flow
+
+    fun getNews() = Pager(
+        config = PagingConfig(
+            pageSize = 20,
+        ),
+        pagingSourceFactory = { NewsPagingSource(safespaceApiService) }
+    ).flow
 
     fun register(
         name: String,

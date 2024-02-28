@@ -52,6 +52,9 @@ android {
 }
 
 dependencies {
+    implementation("androidx.paging:paging-runtime:3.1.1")
+    implementation("androidx.paging:paging-compose:1.0.0-alpha17")
+    implementation("androidx.paging:paging-common-ktx:3.1.1")
 
     implementation("androidx.compose.ui:ui-text-google-fonts:1.6.1")
     implementation("io.coil-kt:coil-compose:2.5.0")
