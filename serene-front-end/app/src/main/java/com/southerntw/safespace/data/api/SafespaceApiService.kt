@@ -13,7 +13,10 @@ interface SafespaceApiService {
 
     // Profile
     @PUT("profile")
-    suspend fun editProfile(@Body requestBody: RequestBody): EditProfileResponse
+    suspend fun editProfile(
+        @Header("Authorization") token: String,
+        @Body requestBody: RequestBody
+    ): EditProfileResponse
 
     @POST("profile/{id}")
     suspend fun getProfile(
