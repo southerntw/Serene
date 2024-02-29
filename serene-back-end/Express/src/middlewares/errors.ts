@@ -42,9 +42,13 @@ export const errorHandler = (
   }
 
   console.error(JSON.stringify(err, null, 2));
+  console.log(`Error: ${err}`);
   return res
     .status(500)
-    .send({ success: false, errors: 
-      { message: "An error occurred. Please check your request and try again." }
+    .send({
+      success: false,
+      errors: {
+        message: "An error occurred. Please check your request and try again.",
+      },
     });
 };
