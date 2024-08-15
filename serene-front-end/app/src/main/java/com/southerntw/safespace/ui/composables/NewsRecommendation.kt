@@ -1,7 +1,6 @@
 package com.southerntw.safespace.ui.composables
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -22,7 +21,7 @@ import com.southerntw.safespace.ui.theme.AlmostBlack
 import com.southerntw.safespace.ui.theme.White
 
 @Composable
-fun NewsRecommendation(modifier: Modifier = Modifier, newsHeader: Int, newsTitle: String) {
+fun NewsRecommendation(modifier: Modifier = Modifier, newsHeader: String?, newsTitle: String?) {
     Card(
         shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(
@@ -42,13 +41,15 @@ fun NewsRecommendation(modifier: Modifier = Modifier, newsHeader: Int, newsTitle
                     .fillMaxWidth()
                     .height(100.dp)
             )
-            Text(
-                text = newsTitle,
-                style = MaterialTheme.typography.bodySmall,
-                color = AlmostBlack,
-                textAlign = TextAlign.Center,
-                modifier = modifier.padding(top = 8.dp)
-            )
+             if (newsTitle != null) {
+                 Text(
+                     text = newsTitle,
+                     style = MaterialTheme.typography.bodySmall,
+                     color = AlmostBlack,
+                     textAlign = TextAlign.Center,
+                     modifier = modifier.padding(top = 8.dp)
+                 )
+             }
         }
     }
 }

@@ -11,6 +11,7 @@ import {
   postThreadValidator,
   editProfileValidator,
   userIdValidator,
+  encourageValidator
 } from "../middlewares/requestValidators";
 
 const router = Router();
@@ -31,8 +32,8 @@ router.use(
   }),
 );
 
-router.post("/bot/chat", verifyToken, chatValidator, bot.sendChat);
-router.get("/bot/encourage", verifyToken, bot.encourage);
+router.post("/bot/chat", chatValidator, bot.sendChat);
+router.post("/bot/encourage", encourageValidator, bot.encourage);
 
 router.put("/user", verifyToken, editProfileValidator, user.editUser); // Done
 router.get("/user/:id", userIdValidator, user.getUser); // Done

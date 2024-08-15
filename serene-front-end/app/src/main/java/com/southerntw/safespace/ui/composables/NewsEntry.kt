@@ -31,7 +31,7 @@ import coil.compose.AsyncImage
 import com.southerntw.safespace.ui.theme.AlmostBlack
 
 @Composable
-fun NewsEntry(modifier: Modifier = Modifier, newsName: String, newsDescription: String, newsImage: Int, onClick: () -> Unit) {
+fun NewsEntry(modifier: Modifier = Modifier, newsName: String, newsDescription: String, newsImage: String, onClick: () -> Unit) {
     Box(modifier = modifier
         .fillMaxWidth()
         .clickable { onClick() }

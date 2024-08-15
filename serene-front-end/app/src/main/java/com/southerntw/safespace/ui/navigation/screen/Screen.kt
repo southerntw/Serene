@@ -10,8 +10,12 @@ sealed class Screen(val route: String) {
     object Profile : Screen("profile")
 
     // TODO: Routes?
-    object Thread : Screen("thread")
-    object News : Screen("news")
+    object Thread : Screen("thread/{threadId}") {
+        fun createRoute(threadId: Int) = "thread/$threadId"
+    }
+    object News : Screen("news/{newsId}") {
+        fun createRoute(newsId: Int) = "news/$newsId"
+    }
 
     object MoreThreads : Screen("morethreads")
     object MoreNews : Screen("morenews")

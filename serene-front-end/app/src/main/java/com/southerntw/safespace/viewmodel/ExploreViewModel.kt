@@ -27,13 +27,38 @@ class ExploreViewModel @Inject constructor(private val repository: Repository) :
     private val _userToken = mutableStateOf("")
     private val _userId = mutableStateOf("")
 
+    fun tryUserToken() {
+        viewModelScope.launch {
+            repository.getUserToken().collect {
+                _userToken.value = it
+            }
+        }
+    }
+
+    fun tryUserId() {
+        viewModelScope.launch {
+            repository.getUserId().collect {
+                _userId.value = it
+            }
+        }
+    }
+
     // Threads
-    fun getThreads(): Flow<PagingData<ThreadsData>> =
-        repository.getThreads().cachedIn(viewModelScope)
+    private val _threads = MutableStateFlow<PagingData<ThreadsData>>(PagingData.empty())
+    val threads: StateFlow<PagingData<ThreadsData>> = _threads
+
+    fun fetchThreads() {
+        viewModelScope.launch {
+            repository.getThreads()
+                .cachedIn(viewModelScope)
+                .collect { pagingData ->
+                    _threads.value = pagingData
+                }
+        }
+    }
 
     private val _threadsResponse: MutableStateFlow<UiState<ThreadResponse>> = MutableStateFlow(UiState.Loading)
-    private val threadResponse: StateFlow<UiState<ThreadResponse>>
-        get() = _threadsResponse
+    val threadResponse: StateFlow<UiState<ThreadResponse>> get() = _threadsResponse
 
     fun getDetailedThread(id: Int) {
         viewModelScope.launch {
@@ -44,8 +69,7 @@ class ExploreViewModel @Inject constructor(private val repository: Repository) :
     }
 
     private val _postThreadResponse: MutableStateFlow<AuthUiState<PostThreadResponse>> = MutableStateFlow(AuthUiState.Idle)
-    private val postThreadResponse: StateFlow<AuthUiState<PostThreadResponse>>
-        get() = _postThreadResponse
+    val postThreadResponse: StateFlow<AuthUiState<PostThreadResponse>> get() = _postThreadResponse
 
     private val _title = mutableStateOf("")
     val title: State<String> get() = _title
@@ -66,13 +90,22 @@ class ExploreViewModel @Inject constructor(private val repository: Repository) :
         }
     }
 
-    // news
-    fun getNews(): Flow<PagingData<NewsData>> =
-        repository.getNews().cachedIn(viewModelScope)
+    // News
+    private val _news = MutableStateFlow<PagingData<NewsData>>(PagingData.empty())
+    val news: StateFlow<PagingData<NewsData>> = _news
+
+    fun fetchNews() {
+        viewModelScope.launch {
+            repository.getNews()
+                .cachedIn(viewModelScope)
+                .collect { pagingData ->
+                    _news.value = pagingData
+                }
+        }
+    }
 
     private val _newsResponse: MutableStateFlow<UiState<ANewsResponse>> = MutableStateFlow(UiState.Loading)
-    private val newsResponse: StateFlow<UiState<ANewsResponse>>
-        get() = _newsResponse
+    val newsResponse: StateFlow<UiState<ANewsResponse>> get() = _newsResponse
 
     fun getDetailedNews(id: Int) {
         viewModelScope.launch {

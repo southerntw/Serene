@@ -38,39 +38,98 @@ import com.southerntw.safespace.ui.theme.GrayOnBackground
 import com.southerntw.safespace.ui.theme.White
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.layout.ContentScale
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import com.southerntw.safespace.util.UiState
+import com.southerntw.safespace.viewmodel.ExploreViewModel
 
 @Composable
-fun NewsScreen(modifier: Modifier = Modifier, navHostController: NavHostController) {
-    NewsContent(modifier = modifier, newsTitle = "New Way of Dealing with Mental Health is Found!", newsDescription = "By somebody, 12 December 2023 at 3.30", newsContent = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum\n" +
-            "\n" +
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum\n" +
-            "\n" +
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum", newsHeader = R.drawable.mock_newsimage)
-}
+fun NewsScreen(
+    modifier: Modifier = Modifier,
+    navHostController: NavHostController,
+    newsId: Int,
+    viewModel: ExploreViewModel = hiltViewModel()
+) {
+    val newsResponse by viewModel.newsResponse.collectAsState()
 
-@Composable
-fun NewsContent(modifier: Modifier, newsTitle: String, newsDescription: String, newsContent: String, newsHeader: Int) {
-        Column(
-            Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState()))
-        {
-            AsyncImage(model = newsHeader, contentDescription = "News Header", modifier = modifier
-                .fillMaxWidth()
-                .height(225.dp),
-                contentScale = ContentScale.Crop
-            )
+    LaunchedEffect(newsId) {
+        viewModel.getDetailedNews(newsId)
+    }
 
-            Column(
-                modifier
-                    .background(White)
-                    .padding(top = 38.dp, start = 28.dp, end = 28.dp, bottom = 24.dp)) {
-                Text(newsTitle, color = AlmostBlack, style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Bold, lineHeight = 36.sp), modifier = modifier.padding(bottom = 8.dp))
-                Text(newsDescription, color = Color.LightGray, style = MaterialTheme.typography.bodySmall, modifier = modifier.padding(bottom = 32.dp))
-
-                Text(newsContent, color = AlmostBlack, style = MaterialTheme.typography.titleSmall)
+    when (val response = newsResponse) {
+        is UiState.Loading -> {
+            // Show loading indicator
+            Text("Loading...")
+        }
+        is UiState.Success -> {
+            val news = response.data?.newsData
+            news?.let {
+                NewsContent(
+                    modifier = modifier,
+                    newsTitle = it.title ?: "No Title",
+                    newsDescription = "${it.writer}, ${it.category}",
+                    newsContent = it.content ?: "No Content",
+                    newsHeader = it.thumbnail ?: ""
+                )
             }
         }
+        is UiState.Failure -> {
+            // Show error message
+            Text("Failed to load news")
+        }
+    }
+}
+
+
+@Composable
+fun NewsContent(
+    modifier: Modifier,
+    newsTitle: String,
+    newsDescription: String,
+    newsContent: String,
+    newsHeader: String
+) {
+    Column(
+        Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+    ) {
+        AsyncImage(
+            model = newsHeader,
+            contentDescription = "News Header",
+            modifier = modifier
+                .fillMaxWidth()
+                .height(225.dp),
+            contentScale = ContentScale.Crop
+        )
+
+        Column(
+            modifier
+                .background(White)
+                .padding(top = 38.dp, start = 28.dp, end = 28.dp, bottom = 24.dp)
+        ) {
+            Text(
+                newsTitle,
+                color = AlmostBlack,
+                style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Bold, lineHeight = 36.sp),
+                modifier = modifier.padding(bottom = 8.dp)
+            )
+            Text(
+                newsDescription,
+                color = Color.LightGray,
+                style = MaterialTheme.typography.bodySmall,
+                modifier = modifier.padding(bottom = 32.dp)
+            )
+
+            Text(
+                newsContent,
+                color = AlmostBlack,
+                style = MaterialTheme.typography.titleSmall
+            )
+        }
+    }
 }

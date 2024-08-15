@@ -44,7 +44,7 @@ fun HomeContent(modifier: Modifier, name: String, onCommunityClicked: () -> Unit
             .padding(top = 48.dp, start = 28.dp, end = 28.dp)
             .verticalScroll(rememberScrollState())
     ) {
-        Text("Greetings, $name", style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold), color = AlmostBlack)
+        Text("Greetings!", style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold), color = AlmostBlack)
         Spacer(modifier.height(54.dp))
         Column(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(26.dp)) {
             HomeEntry(headerImage = R.drawable.entry_header1, entryName = "Have a Chat!", entryDescription = "With our AI companion!", onClicked = onChatClicked)

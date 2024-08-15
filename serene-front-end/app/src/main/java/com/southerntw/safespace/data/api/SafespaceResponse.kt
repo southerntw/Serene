@@ -132,6 +132,9 @@ data class ThreadsData (
     @SerializedName("id")
     var id : Int? = null,
 
+    @SerializedName("title")
+    var title : String? = null,
+
     @SerializedName("text")
     var text : String? = null,
 
@@ -181,13 +184,19 @@ data class NewsData (
     var id : Int? = null,
 
     @SerializedName("writer")
-    var text : String? = null,
+    var writer : String? = null,
 
     @SerializedName("content")
-    var tag : String? = null,
+    var content : String? = null,
 
     @SerializedName("category")
-    var threadStarter : String? = null
+    var category : String? = null,
+
+    @SerializedName("title")
+    var title : String? = null,
+
+    @SerializedName("thumbnail")
+    var thumbnail : String? = null
 )
 
 data class ANewsResponse (
@@ -199,4 +208,43 @@ data class ANewsResponse (
 
     @SerializedName("errors")
     var error : ErrorData? = null
+)
+
+// Bot Responses
+data class BotChatResponses (
+    @SerializedName("success")
+    var success: Boolean? = null,
+
+    @SerializedName("data")
+    var chatData: ChatData? = null,
+
+    @SerializedName("errors")
+    var error: ErrorData? = null
+)
+
+data class ChatData (
+    @SerializedName("chat")
+    var chatData: String? = null,
+
+    @SerializedName("sentiment")
+    var sentiment: Boolean? = null,
+)
+
+data class BotEncourageResponses (
+    @SerializedName("success")
+    var success: Boolean? = null,
+
+    @SerializedName("data")
+    var data: EncourageData? = null,
+
+    @SerializedName("errors")
+    var error: ErrorData? = null
+)
+
+data class EncourageData (
+    @SerializedName("message")
+    var message: String? = null,
+
+    @SerializedName("recommendations")
+    var recommendations: List<NewsData>? = null
 )

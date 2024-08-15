@@ -12,10 +12,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.southerntw.safespace.ui.composables.BottomBar
 import com.southerntw.safespace.ui.navigation.screen.Screen
 import com.southerntw.safespace.ui.screens.auth.FillDataScreen
@@ -47,7 +49,7 @@ fun MainJetpack(
     Scaffold(
         bottomBar = {
             if (currentRoute == Screen.Home.route || currentRoute == Screen.Explore.route || currentRoute == Screen.Profile.route) {
-                BottomBar(navHostController = navHostController, name = "Matilda")
+                BottomBar(navHostController = navHostController, name = "Profile")
             }
         }
     ) { innerPadding ->
@@ -141,24 +143,28 @@ fun MainJetpack(
                 ProfileScreen(navHostController = navHostController)
             }
             composable(Screen.Thread.route,
+                arguments = listOf(navArgument("threadId") { type = NavType.IntType }),
                 enterTransition = {
                     slideIntoContainer(
                         AnimatedContentTransitionScope.SlideDirection.Left,
                         animationSpec = tween(400)
                     )
                 }
-            ) {
-                ThreadScreen(navHostController = navHostController)
+            ) { backStackEntry ->
+                val threadId = backStackEntry.arguments?.getInt("threadId") ?: 0
+                ThreadScreen(navHostController = navHostController, threadId = threadId)
             }
             composable(Screen.News.route,
+                arguments = listOf(navArgument("newsId") { type = NavType.IntType }),
                 enterTransition = {
                     slideIntoContainer(
                         AnimatedContentTransitionScope.SlideDirection.Left,
                         animationSpec = tween(400)
                     )
                 }
-            ) {
-                NewsScreen(navHostController = navHostController)
+            ) { backStackEntry ->
+                val newsId = backStackEntry.arguments?.getInt("newsId") ?: 0
+                NewsScreen(navHostController = navHostController, newsId = newsId)
             }
             composable(Screen.MoreThreads.route,
                 enterTransition = {

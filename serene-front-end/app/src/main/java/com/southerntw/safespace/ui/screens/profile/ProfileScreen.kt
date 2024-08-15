@@ -15,19 +15,27 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.southerntw.safespace.R
+import com.southerntw.safespace.data.api.ProfileResponse
 import com.southerntw.safespace.ui.composables.MoodBoard
 import com.southerntw.safespace.ui.composables.MoodDisplay
 import com.southerntw.safespace.ui.navigation.screen.Screen
 import com.southerntw.safespace.ui.theme.AlmostBlack
+import com.southerntw.safespace.util.UiState
+import com.southerntw.safespace.viewmodel.ProfileViewModel
 
 val dummyMood = intArrayOf(
     1, 2, 3, 1, 2, 3, 1,
@@ -36,23 +44,71 @@ val dummyMood = intArrayOf(
 )
 
 @Composable
-fun ProfileScreen(modifier: Modifier = Modifier, navHostController: NavHostController) {
-    ProfileContent(
-        userAvatar = R.drawable.mock_avatar,
-        userName = "Matilda Lestrange",
-        userGender = "Female",
-        userAge = "24",
-        userJoinYear = "2024",
-        userAbout = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-        userMood = "Excellent",
-        onSettingsClicked = {
-            navHostController.navigate(Screen.Settings.route)
+fun ProfileScreen(
+    modifier: Modifier = Modifier,
+    viewModel: ProfileViewModel = hiltViewModel(),
+    navHostController: NavHostController
+) {
+    val profileResponse by viewModel.profileResponse.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.tryUserId() // Ensure userId is fetched
+        viewModel.getUser()   // Fetch the user profile
+    }
+
+    when (profileResponse) {
+        is UiState.Loading -> {
+            // Show ProfileContent with reduced opacity and disabled settings button
+            ProfileContent(
+                modifier = modifier.alpha(0.7f),
+                userAvatar = R.drawable.mock_avatar,
+                userName = "Loading...",
+                userGender = "",
+                userAge = "",
+                userJoinYear = "",
+                userAbout = "Loading...",
+                userMood = "",
+                onSettingsClicked = {}
+            )
         }
-    )
+        is UiState.Success -> {
+            val profileData = (profileResponse as UiState.Success<ProfileResponse>).data?.profileData
+            ProfileContent(
+                userAvatar = R.drawable.mock_avatar, // Replace with profileData.avatar if it is a URL
+                userName = profileData?.name ?: "Unknown",
+                userGender = "Unset",
+                userAge = profileData?.birthdate ?: "Unknown", // Convert birthdate to age if needed
+                userJoinYear = "2024", // Adjust as necessary
+                userAbout = profileData?.about ?: "No description available",
+                userMood = "Excellent",
+                onSettingsClicked = {
+                    navHostController.navigate(Screen.Settings.route)
+                }
+            )
+        }
+        is UiState.Failure -> {
+            // Show error UI
+            Text("Failed to load profile")
+        }
+        else -> {
+            Text("Failed to load profile")
+        }
+    }
 }
 
+
 @Composable
-fun ProfileContent(modifier: Modifier = Modifier, onSettingsClicked: () -> Unit, userAvatar: Int, userName: String, userGender: String, userAge: String, userJoinYear: String, userAbout: String, userMood: String) {
+fun ProfileContent(
+    modifier: Modifier = Modifier,
+    onSettingsClicked: () -> Unit,
+    userAvatar: Int,
+    userName: String,
+    userGender: String,
+    userAge: String,
+    userJoinYear: String,
+    userAbout: String,
+    userMood: String
+) {
     Box(modifier.fillMaxSize()) {
         Column(
             modifier = modifier

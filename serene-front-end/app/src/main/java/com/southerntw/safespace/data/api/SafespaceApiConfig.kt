@@ -13,7 +13,7 @@ object SafespaceApiConfig {
             .build()
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.1.12:3000/api/v1/")
+            .baseUrl("https://together-severely-buck.ngrok-free.app/api/v1/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()

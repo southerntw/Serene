@@ -48,6 +48,11 @@ export const postThreadValidator = [
   body("threadStarter", "threadStarter must be string").isString(),
 ];
 
+export const encourageValidator = [
+  body("userId", "User ID should not be empty").not().isEmpty(),
+  body("userId", "User ID must be a UUID").isUUID(),
+];
+
 export const editProfileValidator = [
   body("id", "ID should not be empty").not().isEmpty(),
   body("id", "ID must be a UUID").isUUID(),

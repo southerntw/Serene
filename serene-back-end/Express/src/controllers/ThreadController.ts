@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { db } from "../database/db";
 import { threads, NewThread } from "../database/schema/threads";
+import { users} from "../database/schema/users";
 import { eq } from "drizzle-orm";
 import { validationResult, Result, matchedData } from "express-validator";
 import BadRequestError from "../errors/BadRequestError";
@@ -13,16 +14,24 @@ export class ThreadController {
     const offset = (page - 1) * limit;
 
     try {
-      const forumThreads = await db
-        .select()
-        .from(threads)
-        .limit(limit)
-        .offset(offset);
-      res.json({ success: true, data: forumThreads });
-      return;
+        const forumThreads = await db
+            .select({
+                id: threads.id,
+                title: threads.title,
+                text: threads.text,
+                tag: threads.tag,
+                threadStarter: users.name,
+            })
+            .from(threads)
+            .leftJoin(users, eq(threads.threadStarter, users.id))
+            .limit(limit)
+            .offset(offset)
+            .execute();
+
+        res.json({ success: true, data: forumThreads });
     } catch (err) {
-      console.log(err);
-      throw new Error(err);
+        console.log(err);
+        res.status(500).json({ success: false, error: err.message });
     }
   }
 

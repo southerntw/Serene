@@ -35,12 +35,13 @@ class SessionPreferences @Inject constructor(private val dataStore: DataStore<Pr
 
     suspend fun startSession(
         userChecked: Boolean,
-        TokenChecked: String
+        token: String,
+        id: String
     ) {
         dataStore.edit {
             it[userExist] = userChecked
-            it[userToken] = TokenChecked
-            it[userId] = TokenChecked
+            it[userToken] = token
+            it[userId] = id
         }
     }
 

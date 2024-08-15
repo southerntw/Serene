@@ -36,75 +36,119 @@ import com.southerntw.safespace.ui.theme.GrayOnBackground
 import com.southerntw.safespace.ui.theme.White
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.southerntw.safespace.util.UiState
+import com.southerntw.safespace.viewmodel.ExploreViewModel
 
 @Composable
-fun ThreadScreen(modifier: Modifier = Modifier, navHostController: NavHostController) {
-    ThreadContent(modifier = modifier, threadTitle = "I am not feeling great today.. Help!", threadDescription = "By somebody, 12 December 2023 at 3:30", threadContent = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum",
-        userComment = "", onCommentChanged = {}, onSendClicked = {})
+fun ThreadScreen(
+    modifier: Modifier = Modifier,
+    navHostController: NavHostController,
+    threadId: Int,
+    viewModel: ExploreViewModel = hiltViewModel()
+) {
+    val threadResponse by viewModel.threadResponse.collectAsState()
+
+    LaunchedEffect(threadId) {
+        viewModel.getDetailedThread(threadId)
+    }
+
+    when (val response = threadResponse) {
+        is UiState.Loading -> {
+            // Show loading indicator
+            Text("Loading...")
+        }
+        is UiState.Success -> {
+            val thread = response.data?.threadData
+            thread?.let {
+                ThreadContent(
+                    modifier = modifier,
+                    threadTitle = it.title ?: "No Title",
+                    threadDescription = "By ${it.threadStarter}",
+                    threadContent = it.text ?: "No Content",
+                    userComment = "",
+                    onCommentChanged = {},
+                    onSendClicked = {}
+                )
+            }
+        }
+        is UiState.Failure -> {
+            // Show error message
+            Text("Failed to load thread")
+        }
+    }
 }
 
 @Composable
-fun ThreadContent(modifier: Modifier, threadTitle: String, threadDescription: String, threadContent: String, userComment: String, onCommentChanged: (String) -> Unit, onSendClicked: () -> Unit) {
+fun ThreadContent(
+    modifier: Modifier,
+    threadTitle: String,
+    threadDescription: String,
+    threadContent: String,
+    userComment: String,
+    onCommentChanged: (String) -> Unit,
+    onSendClicked: () -> Unit
+) {
+    Column(
+        Modifier
+            .fillMaxSize()
+            .background(GrayBackground)
+            .verticalScroll(rememberScrollState()))
+    {
         Column(
-            Modifier
-                .fillMaxSize()
-                .background(GrayBackground)
-                .verticalScroll(rememberScrollState()))
-        {
-            Column(
-                modifier
-                    .background(White)
-                    .padding(top = 38.dp, start = 28.dp, end = 28.dp, bottom = 24.dp)) {
-                Text(threadTitle, color = AlmostBlack, style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Bold, lineHeight = 36.sp), modifier = modifier.padding(bottom = 8.dp))
-                Text(threadDescription, color = Color.LightGray, style = MaterialTheme.typography.bodySmall, modifier = modifier.padding(bottom = 32.dp))
+            modifier
+                .background(White).fillMaxWidth()
+                .padding(top = 38.dp, start = 28.dp, end = 28.dp, bottom = 24.dp)) {
+            Text(threadTitle, color = AlmostBlack, style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Bold, lineHeight = 36.sp), modifier = modifier.padding(bottom = 8.dp))
+            Text(threadDescription, color = Color.LightGray, style = MaterialTheme.typography.bodySmall, modifier = modifier.padding(bottom = 32.dp))
 
-                Text(threadContent, color = AlmostBlack, style = MaterialTheme.typography.titleSmall)
-            }
-            Canvas(modifier = Modifier
-                .size(1.dp, 32.dp)
-                .align(Alignment.CenterHorizontally)) {
-                val pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
-                drawLine(
-                    color = GrayOnBackground,
-                    start = Offset(0f, 0f),
-                    end = Offset(0f, size.height),
-                    strokeWidth = 2f,
-                    pathEffect = pathEffect
-                )
-            }
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp), modifier = modifier
-                .fillMaxWidth()
-                .padding(start = 12.dp, end = 12.dp, bottom = 24.dp)) {
-                ThreadComment(commentName = "Someone", commentDescription = "13 December 2023 at 3.30", commentContent = "I don't think that's true. Hang in there.")
-                ThreadComment(commentName = "Someone", commentDescription = "13 December 2023 at 3.30", commentContent = "I don't think that's true. Hang in there. Hang in. Hang in. Hang in. Hang in. Hang in. Hang in. Hang in. Hang in. Hang in. ")
-                ThreadComment(commentName = "Someone", commentDescription = "13 December 2023 at 3.30", commentContent = "I don't think that's true. Hang in there. Hang in. Hang in. Hang in. Hang in. Hang in. Hang in. Hang in. Hang in. Hang in. ")
-                ThreadComment(commentName = "Someone", commentDescription = "13 December 2023 at 3.30", commentContent = "I don't think that's true. Hang in there. Hang in. Hang in. Hang in. Hang in. Hang in. Hang in. Hang in. Hang in. Hang in. ")
-                Box(modifier.fillMaxWidth().background(White)) {
-                    Column(modifier.fillMaxWidth()) {
-                        OutlinedTextField(label = { Text("Leave a comment!") }, value = userComment, onValueChange = onCommentChanged, minLines =  5,
-                            colors = TextFieldDefaults.colors(
-                                focusedTextColor = AlmostBlack,
-                                focusedIndicatorColor = White,
-                                focusedContainerColor = White,
-                                focusedLabelColor = AlmostBlack,
-                                unfocusedIndicatorColor = White,
-                                unfocusedContainerColor = White,
-                                unfocusedLabelColor = AlmostBlack,
-                                cursorColor = AlmostBlack
-                            ),
-                            modifier = modifier.fillMaxWidth()
+            Text(threadContent, color = AlmostBlack, style = MaterialTheme.typography.titleSmall)
+        }
+        Canvas(modifier = Modifier
+            .size(1.dp, 32.dp)
+            .align(Alignment.CenterHorizontally)) {
+            val pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
+            drawLine(
+                color = GrayOnBackground,
+                start = Offset(0f, 0f),
+                end = Offset(0f, size.height),
+                strokeWidth = 2f,
+                pathEffect = pathEffect
+            )
+        }
+        Column(verticalArrangement = Arrangement.spacedBy(8.dp), modifier = modifier
+            .fillMaxWidth()
+            .padding(start = 12.dp, end = 12.dp, bottom = 24.dp)) {
+            ThreadComment(commentName = "Someone", commentDescription = "13 December 2023 at 3.30", commentContent = "This is an example comment.")
+            Box(modifier.fillMaxWidth().background(White)) {
+                Column(modifier.fillMaxWidth()) {
+                    OutlinedTextField(label = { Text("Leave a comment!") }, value = userComment, onValueChange = onCommentChanged, minLines =  5,
+                        colors = TextFieldDefaults.colors(
+                            focusedTextColor = AlmostBlack,
+                            focusedIndicatorColor = White,
+                            focusedContainerColor = White,
+                            focusedLabelColor = AlmostBlack,
+                            unfocusedIndicatorColor = White,
+                            unfocusedContainerColor = White,
+                            unfocusedLabelColor = AlmostBlack,
+                            cursorColor = AlmostBlack
+                        ),
+                        modifier = modifier.fillMaxWidth()
+                    )
+                    IconButton(onClick = { onSendClicked() }) {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(R.drawable.icon_send),
+                            contentDescription = "Send Message",
+                            tint = AlmostBlack,
+                            modifier = Modifier.size(24.dp)
                         )
-                        IconButton(onClick = { onSendClicked() }) {
-                            Icon(
-                                imageVector = ImageVector.vectorResource(R.drawable.icon_send),
-                                contentDescription = "Send Message",
-                                tint = AlmostBlack,
-                                modifier = Modifier.size(24.dp)
-                            )
-                        }
                     }
-
                 }
+
             }
         }
+    }
 }

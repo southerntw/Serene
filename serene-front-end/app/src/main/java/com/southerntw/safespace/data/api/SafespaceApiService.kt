@@ -12,13 +12,13 @@ interface SafespaceApiService {
     suspend fun login(@Body requestBody: RequestBody): AuthResponse
 
     // Profile
-    @PUT("profile")
+    @PUT("user")
     suspend fun editProfile(
         @Header("Authorization") token: String,
         @Body requestBody: RequestBody
     ): EditProfileResponse
 
-    @POST("profile/{id}")
+    @GET("user/{id}")
     suspend fun getProfile(
         @Path("id") id: String
     ): ProfileResponse
@@ -50,4 +50,17 @@ interface SafespaceApiService {
     suspend fun getANews(
         @Path("id") id: Int
     ): ANewsResponse
+
+    // Bot
+    @POST("bot/chat")
+    suspend fun botChat(
+        @Header("Authorization") token: String,
+        @Body requestBody: RequestBody
+    ): BotChatResponses
+
+    @POST("bot/encourage")
+    suspend fun botEncourage(
+        @Header("Authorization") token: String,
+        @Body requestBody: RequestBody
+    ): BotEncourageResponses
 }

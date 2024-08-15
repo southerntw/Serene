@@ -6,6 +6,8 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import com.southerntw.safespace.data.api.ANewsResponse
 import com.southerntw.safespace.data.api.AuthResponse
+import com.southerntw.safespace.data.api.BotChatResponses
+import com.southerntw.safespace.data.api.BotEncourageResponses
 import com.southerntw.safespace.data.api.EditProfileResponse
 import com.southerntw.safespace.data.api.NewsResponse
 import com.southerntw.safespace.data.api.PostThreadResponse
@@ -16,6 +18,7 @@ import com.southerntw.safespace.data.pagingsource.NewsPagingSource
 import com.southerntw.safespace.data.pagingsource.ThreadsPagingSource
 import com.southerntw.safespace.data.preferences.SessionPreferences
 import com.southerntw.safespace.util.AuthUiState
+import com.southerntw.safespace.util.ChatUiState
 import com.southerntw.safespace.util.UiState
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -150,13 +153,13 @@ class Repository @Inject constructor(
 
         return flow {
             try {
-                Log.d("Login", "Enters Try")
                 emit(AuthUiState.Idle)
                 emit(AuthUiState.Load)
-                Log.d("Login", "Enters Load")
                 val responseLogin = safespaceApiService.login(requestBody)
-                Log.d("Login", "Enters Post-Load")
-                responseLogin.loginData?.token?.let { sessionPreferences.startSession(true, it) }
+                responseLogin.loginData?.let { loginData ->
+                    sessionPreferences.startSession(true, loginData.token ?: "", loginData.id ?: "")
+                    Log.d("Chat", "Login Token: ${loginData.token ?: ""}")
+                }
                 emit(AuthUiState.Success(responseLogin))
             } catch (e: Exception) {
                 Log.d("Login", "Enters catch")
@@ -199,6 +202,47 @@ class Repository @Inject constructor(
                 emit(AuthUiState.Success(responseProfile))
             } catch (e: Exception) {
                 emit(AuthUiState.Failure(e))
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun botChat(token: String, userId: String, message: String): Flow<ChatUiState<BotChatResponses>> {
+        Log.d("Chat", "Repository1");
+        val jsonObject = JSONObject().apply {
+            put("userId", userId)
+            put("message", message)
+        }
+        Log.d("Chat", jsonObject.toString());
+        Log.d("Chat", token);
+
+        val requestBody = jsonObject.toString().toRequestBody("application/json".toMediaTypeOrNull())
+
+        return flow {
+            try {
+                Log.d("Chat", "Repository3");
+                val response = safespaceApiService.botChat("Bearer $token", requestBody)
+                emit(ChatUiState.Success(response))
+                Log.d("Chat", "Repository4");
+            } catch (e: Exception) {
+                emit(ChatUiState.Failure(e))
+                Log.e("Chat", e.toString());
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun botEncourage(token: String, userId: String): Flow<ChatUiState<BotEncourageResponses>> {
+        val jsonObject = JSONObject().apply {
+            put("userId", userId)
+        }
+
+        val requestBody = jsonObject.toString().toRequestBody("application/json".toMediaTypeOrNull())
+
+        return flow {
+            try {
+                val response = safespaceApiService.botEncourage("Bearer $token", requestBody)
+                emit(ChatUiState.Success(response))
+            } catch (e: Exception) {
+                emit(ChatUiState.Failure(e))
             }
         }.flowOn(Dispatchers.IO)
     }
