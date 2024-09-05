@@ -19,7 +19,7 @@ app.use("/api/v1", router);
 app.use(errorHandler);
 app.get("*", wildcardRoute);
 
-const port = 3000;
+const port = 3060;
 app.listen(port, () => {
   return console.log(`Express is listening at http://localhost:${port}`);
 });

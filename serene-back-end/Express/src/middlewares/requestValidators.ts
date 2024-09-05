@@ -53,17 +53,18 @@ export const encourageValidator = [
   body("userId", "User ID must be a UUID").isUUID(),
 ];
 
+export const commentValidator = [
+  body("userId", "User ID should not be empty").not().isEmpty(),
+  body("threadId", "Thread ID must not be empty").not().isEmpty(),
+  body("comment", "Comment must not be empty").not().isEmpty(),
+];
+
 export const editProfileValidator = [
   body("id", "ID should not be empty").not().isEmpty(),
   body("id", "ID must be a UUID").isUUID(),
   body("name", "Name should be at least 4 characters").isLength({ min: 4 }),
-  body("email", "Email should not be empty").not().isEmpty(),
-  body("email", "Invalid email format").normalizeEmail().isEmail(),
-  body("password", "Password should be at least 6 characters").isLength({
-    min: 6,
-  }),
   body("avatar", "Avatar must be a string").isString().optional(),
   body("about", "About must be a string").isString().optional(),
   body("birthdate", "Birthdate must be a date").isISO8601().toDate().optional(),
-  body("gender", "Gender should not be empty").isString().optional(),
+  body("gender", "Gender should not be empty").isString().toLowerCase().optional(),
 ];

@@ -25,6 +25,17 @@ export class UserController {
         .from(users)
         .where(eq(users.id, userId));
       const user = usersData[0];
+
+      // Inline age calculation
+      const birthdate = new Date(user.birthdate);
+      const today = new Date();
+      let age = today.getFullYear() - birthdate.getFullYear();
+      const monthDiff = today.getMonth() - birthdate.getMonth();
+
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthdate.getDate())) {
+        age--;
+      }
+
       res.json({
         success: true,
         data: {
@@ -33,7 +44,8 @@ export class UserController {
           email: user.email,
           avatar: user.avatar,
           about: user.about,
-          birthdate: user.birthdate,
+          gender: user.gender,
+          birthdate: age
         },
       });
       return;
@@ -60,11 +72,10 @@ export class UserController {
         .set({
           id: data.id,
           name: data.name,
-          email: data.email,
-          password: data.password,
           avatar: data.avatar,
           about: data.about,
           birthdate: data.birthdate,
+          gender: data.gender
         })
         .where(eq(users.id, data.id));
       res.json({
@@ -76,6 +87,8 @@ export class UserController {
           avatar: data.avatar,
           about: data.about,
           birthdate: data.birthdate,
+          gender: data.gender
+
         },
       });
       return;

@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { db } from "../database/db";
 import { threads, NewThread } from "../database/schema/threads";
+import { comments, NewComment } from "../database/schema/comments";
 import { users} from "../database/schema/users";
 import { eq } from "drizzle-orm";
 import { validationResult, Result, matchedData } from "express-validator";
@@ -38,28 +39,57 @@ export class ThreadController {
   public async getThread(req: Request, res: Response) {
     const result: Result = validationResult(req);
     if (!result.isEmpty()) {
-      throw new BadRequestError({
-        message: "invalid params",
-        logging: true,
-        context: result.array(),
-      });
+        throw new BadRequestError({
+            message: "Invalid parameters",
+            logging: true,
+            context: result.array(),
+        });
     }
 
     const threadId = Number(req.params.id);
 
     try {
-      const forumData = await db
-        .select()
-        .from(threads)
-        .where(eq(threads.id, threadId));
-      const threadData = forumData[0];
-      res.json({ success: true, data: threadData });
-      return;
+        const forumData = await db
+            .select()
+            .from(threads)
+            .where(eq(threads.id, threadId));
+        const threadData = forumData[0];
+
+        if (!threadData) {
+            return res.status(404).json({
+                success: false,
+                message: "Thread not found",
+            });
+        }
+
+        const threadComments = await db
+            .select({
+                id: comments.id,
+                comment: comments.comment,
+                userId: comments.userId,
+                threadId: comments.threadId,
+                userName: users.name, // Assuming you want to include the user's name
+            })
+            .from(comments)
+            .leftJoin(users, eq(comments.userId, users.id))
+            .where(eq(comments.threadId, threadId))
+            .execute();
+
+        const data = {
+            thread: threadData,
+            comments: threadComments,
+        };
+
+        res.json({ success: true, data });
     } catch (err) {
-      console.log(err);
-      throw new Error(err);
+        console.error(err);
+        res.status(500).json({
+            success: false,
+            message: "Internal server error",
+        });
     }
-  }
+}
+
 
   public async postThread(req: Request, res: Response) {
     const result: Result = validationResult(req);
@@ -92,6 +122,74 @@ export class ThreadController {
     } catch (err) {
       console.log(err);
       throw new Error(err);
+    }
+  }
+
+  public async commentThread(req: Request, res: Response) {
+    // Validate the request data
+    const result: Result = validationResult(req);
+    if (!result.isEmpty()) {
+      throw new ValidationError({
+        message: "Missing required fields",
+        logging: true,
+        context: result.array(),
+      });
+    }
+
+    // Extract the validated data
+    const data = matchedData(req);
+    const newComment: NewComment = {
+      comment: data.comment,
+      userId: data.userId, // assuming the input field is `user_id`
+      threadId: data.threadId, // assuming the input field is `thread_id`
+    };
+
+    try {
+      // Insert the new comment into the database
+      await db.insert(comments).values(newComment);
+      res.status(201).json({
+        success: true,
+        data: {
+          id: newComment.id,
+          comment: newComment.comment,
+          user_id: newComment.userId,
+          thread_id: newComment.threadId,
+        },
+      });
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ success: false, error: err.message });
+    }
+  }
+
+  public async getComments(req: Request, res: Response) {
+    const threadId = Number(req.params.threadId);
+
+    try {
+      const threadComments = await db
+        .select({
+          id: comments.id,
+          comment: comments.comment,
+          userId: comments.userId,
+          threadId: comments.threadId,
+          userName: users.name, // Assuming you want to include the user's name
+        })
+        .from(comments)
+        .leftJoin(users, eq(comments.userId, users.id))
+        .where(eq(comments.threadId, threadId))
+        .execute();
+
+      if (threadComments.length === 0) {
+        return res.status(404).json({
+          success: false,
+          message: "No comments found for this thread",
+        });
+      }
+
+      res.json({ success: true, data: threadComments });
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ success: false, error: err.message });
     }
   }
 }
