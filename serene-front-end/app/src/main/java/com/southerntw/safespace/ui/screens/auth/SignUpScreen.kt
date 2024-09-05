@@ -98,6 +98,8 @@ fun SignUpScreen(modifier: Modifier = Modifier,
                     Toast.makeText(context, "Register Gagal", Toast.LENGTH_SHORT).show()
                 }
             }
+
+            else -> {}
         }
     }
 }

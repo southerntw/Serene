@@ -7,10 +7,12 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.southerntw.safespace.data.api.ANewsResponse
+import com.southerntw.safespace.data.api.CommentsResponse
 import com.southerntw.safespace.data.api.NewsData
+import com.southerntw.safespace.data.api.PostCommentResponse
 import com.southerntw.safespace.data.api.PostThreadResponse
 import com.southerntw.safespace.data.api.ThreadResponse
-import com.southerntw.safespace.data.api.ThreadsData
+import com.southerntw.safespace.data.api.ThreadsDetail
 import com.southerntw.safespace.data.repository.Repository
 import com.southerntw.safespace.util.AuthUiState
 import com.southerntw.safespace.util.UiState
@@ -20,6 +22,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectIndexed
 import kotlinx.coroutines.launch
+import org.w3c.dom.Comment
 import javax.inject.Inject
 
 @HiltViewModel
@@ -44,8 +47,8 @@ class ExploreViewModel @Inject constructor(private val repository: Repository) :
     }
 
     // Threads
-    private val _threads = MutableStateFlow<PagingData<ThreadsData>>(PagingData.empty())
-    val threads: StateFlow<PagingData<ThreadsData>> = _threads
+    private val _threads = MutableStateFlow<PagingData<ThreadsDetail>>(PagingData.empty())
+    val threads: StateFlow<PagingData<ThreadsDetail>> = _threads
 
     fun fetchThreads() {
         viewModelScope.launch {
@@ -113,5 +116,47 @@ class ExploreViewModel @Inject constructor(private val repository: Repository) :
                 _newsResponse.value = it
             }
         }
+    }
+
+    // Get Comments
+    private val _commentsResponse: MutableStateFlow<UiState<CommentsResponse>> = MutableStateFlow(UiState.Loading)
+    val commentsResponse: StateFlow<UiState<CommentsResponse>> get() = _commentsResponse
+
+    fun getComments(threadId: Int) {
+        viewModelScope.launch {
+            repository.getComments(threadId).collect {
+                _commentsResponse.value = it
+            }
+        }
+    }
+
+    private val _userComment = mutableStateOf("")
+    val userComment: State<String> get() = _userComment
+
+    fun onCommentChanged(newComment: String) {
+        _userComment.value = newComment
+    }
+
+    private val _postCommentResponse: MutableStateFlow<AuthUiState<PostCommentResponse>> = MutableStateFlow(AuthUiState.Idle)
+    val postCommentResponse: StateFlow<AuthUiState<PostCommentResponse>> get() = _postCommentResponse
+
+    fun postComment(threadId: Int, comment: String) {
+        viewModelScope.launch {
+            // Ensure you have token and userId values ready to use
+            val userId = _userId.value
+
+            if (userId.isNotEmpty()) {
+                repository.postComment(userId, threadId, comment).collect {
+                    _postCommentResponse.value = it
+                }
+            }
+        }
+    }
+
+    fun refreshThread(threadId: Int) {
+        viewModelScope.launch {
+            getDetailedThread(threadId)
+        }
+        _userComment.value = ""
     }
 }

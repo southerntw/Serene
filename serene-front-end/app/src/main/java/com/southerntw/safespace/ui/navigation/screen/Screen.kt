@@ -13,6 +13,8 @@ sealed class Screen(val route: String) {
     object Thread : Screen("thread/{threadId}") {
         fun createRoute(threadId: Int) = "thread/$threadId"
     }
+    object PostThread : Screen("thread/post")
+
     object News : Screen("news/{newsId}") {
         fun createRoute(newsId: Int) = "news/$newsId"
     }

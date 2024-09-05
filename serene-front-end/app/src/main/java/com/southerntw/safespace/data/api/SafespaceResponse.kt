@@ -70,6 +70,9 @@ data class ProfileData (
     @SerializedName("about")
     var about : String? = null,
 
+    @SerializedName("gender")
+    var gender : String? = null,
+
     @SerializedName("birthdate")
     var birthdate : String? = null
 )
@@ -101,6 +104,9 @@ data class EditProfileData (
     @SerializedName("about")
     var about : String? = null,
 
+    @SerializedName("gender")
+    var gender : String? = null,
+
     @SerializedName("birthdate")
     var birthdate : String? = null
 )
@@ -111,7 +117,7 @@ data class ThreadsResponse (
     var success : Boolean? = null,
 
     @SerializedName("data")
-    var threadData : List<ThreadsData>,
+    var threadData : List<ThreadsDetail>,
 
     @SerializedName("errors")
     var error : ErrorData? = null
@@ -122,13 +128,21 @@ data class ThreadResponse (
     var success : Boolean? = null,
 
     @SerializedName("data")
-    var threadData : ThreadsData? = null,
+    var threadData : ThreadData? = null,
 
     @SerializedName("errors")
     var error : ErrorData? = null
 )
 
-data class ThreadsData (
+data class ThreadData (
+   @SerializedName("thread")
+   var threadDetail: ThreadsDetail,
+
+   @SerializedName("comments")
+   var comments: List<ThreadComments>
+)
+
+data class ThreadsDetail (
     @SerializedName("id")
     var id : Int? = null,
 
@@ -143,6 +157,23 @@ data class ThreadsData (
 
     @SerializedName("threadStarter")
     var threadStarter : String? = null
+)
+
+data class ThreadComments (
+    @SerializedName("id")
+    var id: Int? = null,
+
+    @SerializedName("comment")
+    var comment: String? = null,
+
+    @SerializedName("userId")
+    var userId: String? = null,
+
+    @SerializedName("threadId")
+    var threadId: Int? = null,
+
+    @SerializedName("userName")
+    var userName: String? = null
 )
 
 data class PostThreadResponse (
@@ -247,4 +278,53 @@ data class EncourageData (
 
     @SerializedName("recommendations")
     var recommendations: List<NewsData>? = null
+)
+
+// Comment Response
+data class CommentsResponse (
+    @SerializedName("success")
+    var success: Boolean? = null,
+
+    @SerializedName("data")
+    var commentsData: List<CommentData>? = null
+)
+
+// Comment Data
+data class CommentData (
+    @SerializedName("id")
+    var id: Int? = null,
+
+    @SerializedName("comment")
+    var comment: String? = null,
+
+    @SerializedName("userId")
+    var userId: String? = null,
+
+    @SerializedName("threadId")
+    var threadId: Int? = null,
+
+    @SerializedName("userName")
+    var userName: String? = null
+)
+
+
+// Post Comment Response
+data class PostCommentResponse (
+    @SerializedName("success")
+    var success: Boolean? = null,
+
+    @SerializedName("data")
+    var commentData: PostCommentData? = null
+)
+
+// Post Comment Data
+data class PostCommentData (
+    @SerializedName("comment")
+    var comment: String? = null,
+
+    @SerializedName("user_id")
+    var userId: String? = null,
+
+    @SerializedName("thread_id")
+    var threadId: Int? = null
 )

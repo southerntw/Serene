@@ -22,7 +22,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.paging.compose.LazyPagingItems
 import com.southerntw.safespace.R
-import com.southerntw.safespace.data.api.ThreadsData
 import com.southerntw.safespace.ui.composables.NewsEntry
 import com.southerntw.safespace.ui.composables.TagEntry
 import com.southerntw.safespace.ui.composables.ThreadEntry
@@ -32,6 +31,7 @@ import com.southerntw.safespace.viewmodel.ExploreViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.PagingData
 import com.southerntw.safespace.data.api.NewsData
+import com.southerntw.safespace.data.api.ThreadsDetail
 import kotlinx.coroutines.flow.Flow
 
 @Composable
@@ -40,7 +40,7 @@ fun ExploreScreen(
     navHostController: NavHostController,
     viewModel: ExploreViewModel = hiltViewModel()
 ) {
-    val threadsFlow: Flow<PagingData<ThreadsData>> = viewModel.threads
+    val threadsFlow: Flow<PagingData<ThreadsDetail>> = viewModel.threads
     val threads = threadsFlow.collectAsLazyPagingItems()
 
     val newsFlow: Flow<PagingData<NewsData>> = viewModel.news
@@ -74,7 +74,7 @@ fun ExploreScreen(
 @Composable
 fun ExploreContent(
     modifier: Modifier,
-    threads: LazyPagingItems<ThreadsData>,
+    threads: LazyPagingItems<ThreadsDetail>,
     news: LazyPagingItems<NewsData>,
     onTagClicked: () -> Unit,
     onThreadClicked: (Int) -> Unit,

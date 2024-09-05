@@ -4,23 +4,23 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.southerntw.safespace.data.api.NewsData
 import com.southerntw.safespace.data.api.SafespaceApiService
-import com.southerntw.safespace.data.api.ThreadsData
+import com.southerntw.safespace.data.api.ThreadsDetail
 
 class ThreadsPagingSource(
     private val safespaceApiService: SafespaceApiService,
-) : PagingSource<Int, ThreadsData>() {
+) : PagingSource<Int, ThreadsDetail>() {
     private companion object {
         const val INITIAL_PAGE_INDEX = 1
     }
 
-    override fun getRefreshKey(state: PagingState<Int, ThreadsData>): Int? {
+    override fun getRefreshKey(state: PagingState<Int, ThreadsDetail>): Int? {
         return state.anchorPosition?.let {
             state.closestPageToPosition(it)?.prevKey?.plus(1)
                 ?: state.closestPageToPosition(it)?.nextKey?.minus(1)
         }
     }
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ThreadsData> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ThreadsDetail> {
         return try {
             val position = params.key ?: INITIAL_PAGE_INDEX
             val responseData = safespaceApiService.getThreads(

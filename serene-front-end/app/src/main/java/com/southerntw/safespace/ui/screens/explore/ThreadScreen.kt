@@ -1,5 +1,7 @@
 package com.southerntw.safespace.ui.screens.explore
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -40,8 +42,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.southerntw.safespace.data.api.CommentData
+import com.southerntw.safespace.data.api.ThreadComments
+import com.southerntw.safespace.util.AuthUiState
 import com.southerntw.safespace.util.UiState
 import com.southerntw.safespace.viewmodel.ExploreViewModel
+import androidx.compose.ui.platform.LocalContext
 
 @Composable
 fun ThreadScreen(
@@ -51,14 +57,23 @@ fun ThreadScreen(
     viewModel: ExploreViewModel = hiltViewModel()
 ) {
     val threadResponse by viewModel.threadResponse.collectAsState()
+    val postCommentResponse by viewModel.postCommentResponse.collectAsState()
+    val userComment by viewModel.userComment
+    val context = LocalContext.current
 
     LaunchedEffect(threadId) {
         viewModel.getDetailedThread(threadId)
+        viewModel.tryUserId()
+    }
+
+    LaunchedEffect(postCommentResponse) {
+        if (postCommentResponse is AuthUiState.Success) {
+            Toast.makeText(context, "Successfully posted your comment.", Toast.LENGTH_SHORT).show()
+        }
     }
 
     when (val response = threadResponse) {
         is UiState.Loading -> {
-            // Show loading indicator
             Text("Loading...")
         }
         is UiState.Success -> {
@@ -66,21 +81,42 @@ fun ThreadScreen(
             thread?.let {
                 ThreadContent(
                     modifier = modifier,
-                    threadTitle = it.title ?: "No Title",
-                    threadDescription = "By ${it.threadStarter}",
-                    threadContent = it.text ?: "No Content",
-                    userComment = "",
-                    onCommentChanged = {},
-                    onSendClicked = {}
+                    threadTitle = it.threadDetail.title ?: "No Title",
+                    threadDescription = "By ${it.threadDetail.threadStarter}",
+                    threadContent = it.threadDetail.text ?: "No Content",
+                    userComment = userComment,
+                    onCommentChanged = {
+                        newComment -> viewModel.onCommentChanged(newComment)
+                    },
+                    onSendClicked = {
+                        Log.d("thread", "sent, supposedly")
+                        viewModel.postComment(threadId, userComment)
+                    },
+                    comments = it.comments ?: emptyList() // Pass comments here
                 )
             }
         }
         is UiState.Failure -> {
-            // Show error message
             Text("Failed to load thread")
         }
     }
+
+    when (postCommentResponse) {
+        is AuthUiState.Load -> {
+            // Show loading indicator or some feedback to the user
+        }
+        is AuthUiState.Success -> {
+            viewModel.refreshThread(threadId)
+        }
+        is AuthUiState.Failure -> {
+            // Show error message
+        }
+        else -> {
+            // Handle other states if needed
+        }
+    }
 }
+
 
 @Composable
 fun ThreadContent(
@@ -90,14 +126,15 @@ fun ThreadContent(
     threadContent: String,
     userComment: String,
     onCommentChanged: (String) -> Unit,
-    onSendClicked: () -> Unit
+    onSendClicked: () -> Unit,
+    comments: List<ThreadComments>
 ) {
     Column(
         Modifier
             .fillMaxSize()
             .background(GrayBackground)
-            .verticalScroll(rememberScrollState()))
-    {
+            .verticalScroll(rememberScrollState())
+    ) {
         Column(
             modifier
                 .background(White).fillMaxWidth()
@@ -122,10 +159,22 @@ fun ThreadContent(
         Column(verticalArrangement = Arrangement.spacedBy(8.dp), modifier = modifier
             .fillMaxWidth()
             .padding(start = 12.dp, end = 12.dp, bottom = 24.dp)) {
-            ThreadComment(commentName = "Someone", commentDescription = "13 December 2023 at 3.30", commentContent = "This is an example comment.")
+
+            comments.forEach { comment ->
+                ThreadComment(
+                    commentName = comment.userName.toString(),
+                    commentDescription = "",
+                    commentContent = comment.comment.toString()
+                )
+            }
+
             Box(modifier.fillMaxWidth().background(White)) {
                 Column(modifier.fillMaxWidth()) {
-                    OutlinedTextField(label = { Text("Leave a comment!") }, value = userComment, onValueChange = onCommentChanged, minLines =  5,
+                    OutlinedTextField(
+                        label = { Text("Leave a comment!") },
+                        value = userComment,
+                        onValueChange = onCommentChanged,
+                        minLines = 5,
                         colors = TextFieldDefaults.colors(
                             focusedTextColor = AlmostBlack,
                             focusedIndicatorColor = White,
@@ -147,8 +196,8 @@ fun ThreadContent(
                         )
                     }
                 }
-
             }
         }
     }
 }
+

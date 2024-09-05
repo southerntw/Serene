@@ -14,6 +14,7 @@ sealed class AuthUiState<out T> {
 }
 
 sealed class UiState<out T> {
+    object Idle : AuthUiState<Nothing>()
     object Loading : UiState<Nothing>()
 
     data class Success<out T>(

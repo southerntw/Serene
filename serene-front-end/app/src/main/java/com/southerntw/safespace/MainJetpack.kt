@@ -30,6 +30,7 @@ import com.southerntw.safespace.ui.screens.explore.ExploreScreen
 import com.southerntw.safespace.ui.screens.explore.MoreNewsScreen
 import com.southerntw.safespace.ui.screens.explore.MoreThreadsScreen
 import com.southerntw.safespace.ui.screens.explore.NewsScreen
+import com.southerntw.safespace.ui.screens.explore.PostThreadScreen
 import com.southerntw.safespace.ui.screens.explore.ThreadScreen
 import com.southerntw.safespace.ui.screens.home.HomeScreen
 import com.southerntw.safespace.ui.screens.profile.ChatResultScreen
@@ -175,6 +176,9 @@ fun MainJetpack(
                 }
             ) {
                 MoreThreadsScreen(navHostController = navHostController)
+            }
+            composable(Screen.PostThread.route) {
+                PostThreadScreen(navController = navHostController)
             }
             composable(Screen.MoreNews.route,
                 enterTransition = {

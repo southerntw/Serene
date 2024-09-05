@@ -107,6 +107,8 @@ fun SignInScreen(
                     Toast.makeText(context, "Login Gagal", Toast.LENGTH_SHORT).show()
                 }
             }
+
+            else -> {}
         }
     }
 }

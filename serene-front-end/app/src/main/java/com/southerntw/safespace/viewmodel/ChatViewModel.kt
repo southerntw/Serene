@@ -66,13 +66,15 @@ class ChatViewModel @Inject constructor(private val repository: Repository) : Vi
             response.collect { chatUiState ->
                 if (chatUiState is ChatUiState.Success) {
                     chatUiState.data?.chatData?.chatData?.let { chatText ->
-                        val botMessage = com.southerntw.safespace.data.model.ChatData(message = chatText, isUser = false)
+                        val botMessage = com.southerntw.safespace.data.model.ChatData(
+                            message = chatText,
+                            isUser = false
+                        )
                         _chatData.value = _chatData.value + botMessage
                     }
                 }
                 _chatResponses.value = chatUiState
             }
-            _chatMsg.value = ""
         }
     }
 }

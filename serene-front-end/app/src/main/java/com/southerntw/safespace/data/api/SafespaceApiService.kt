@@ -40,6 +40,16 @@ interface SafespaceApiService {
         @Body requestBody: RequestBody
     ): PostThreadResponse
 
+    @POST("comment")
+    suspend fun postComment(
+        @Body requestBody: RequestBody
+    ): PostCommentResponse
+
+    @GET("comments/{threadId}")
+    suspend fun getComments(
+        @Path("threadId") threadId: Int
+    ): CommentsResponse
+
     // News
     @GET("news")
     suspend fun getNews(

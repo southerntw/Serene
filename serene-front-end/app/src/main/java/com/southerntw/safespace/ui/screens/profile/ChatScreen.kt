@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -56,7 +57,7 @@ fun ChatScreen(modifier: Modifier = Modifier, navHostController: NavHostControll
         onUserChat = { viewModel.updateChatMsg(it) },
         onUserSend = {
             viewModel.sendMessage()
-            keyboardController?.hide()
+            viewModel.updateChatMsg("")
         },
         onDoneClicked = {
             navHostController.navigate(Screen.ChatResult.route)
@@ -75,6 +76,12 @@ fun ChatContent(
     isLoading: Boolean,
     modifier: Modifier = Modifier
 ) {
+    val listState = rememberLazyListState()
+
+    LaunchedEffect(chatData.size) {
+        listState.animateScrollToItem(chatData.size)
+    }
+
     Box(modifier.fillMaxSize()) {
         Column(
             Modifier
@@ -84,7 +91,7 @@ fun ChatContent(
             Row(
                 modifier = modifier
                     .fillMaxWidth()
-                    .padding(bottom = 44.dp),
+                    .padding(bottom = 34.dp),
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -93,7 +100,7 @@ fun ChatContent(
                 Spacer(modifier = Modifier.weight(1F))
                 Text("Done chatting >>", style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Medium), color = Color.LightGray, modifier = modifier.clickable { onDoneClicked() })
             }
-            LazyColumn(modifier = modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            LazyColumn(state = listState, modifier = modifier.fillMaxWidth().padding(bottom = 100.dp).fillMaxHeight(), verticalArrangement = Arrangement.Bottom) {
                 items(chatData.size) { index ->
                     val chat = chatData[index]
                     Row(

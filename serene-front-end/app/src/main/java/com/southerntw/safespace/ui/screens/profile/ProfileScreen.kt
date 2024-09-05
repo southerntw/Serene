@@ -76,7 +76,7 @@ fun ProfileScreen(
             ProfileContent(
                 userAvatar = R.drawable.mock_avatar, // Replace with profileData.avatar if it is a URL
                 userName = profileData?.name ?: "Unknown",
-                userGender = "Unset",
+                userGender = profileData?.gender ?: "Unset",
                 userAge = profileData?.birthdate ?: "Unknown", // Convert birthdate to age if needed
                 userJoinYear = "2024", // Adjust as necessary
                 userAbout = profileData?.about ?: "No description available",
@@ -140,16 +140,16 @@ fun ProfileContent(
                 )
                 MoodDisplay(userMood = "Excellent")
 
-                Spacer(modifier.height(24.dp))
+//                Spacer(modifier.height(24.dp))
                 // TODO: Check in other devices.
-                Text(
-                    "Moods Within Last 21 Days",
-                    style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
-                    color = AlmostBlack
-                )
-                Box(modifier.fillMaxWidth()) {
-                    MoodBoard(moodLevel = dummyMood)
-                }
+//                Text(
+//                    "Moods Within Last 21 Days",
+//                    style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
+//                    color = AlmostBlack
+//                )
+//                Box(modifier.fillMaxWidth()) {
+//                    MoodBoard(moodLevel = dummyMood)
+//                }
 
                 Spacer(modifier.height(24.dp))
                 Text(

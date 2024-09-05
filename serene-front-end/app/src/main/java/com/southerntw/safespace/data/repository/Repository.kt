@@ -8,8 +8,11 @@ import com.southerntw.safespace.data.api.ANewsResponse
 import com.southerntw.safespace.data.api.AuthResponse
 import com.southerntw.safespace.data.api.BotChatResponses
 import com.southerntw.safespace.data.api.BotEncourageResponses
+import com.southerntw.safespace.data.api.CommentData
+import com.southerntw.safespace.data.api.CommentsResponse
 import com.southerntw.safespace.data.api.EditProfileResponse
 import com.southerntw.safespace.data.api.NewsResponse
+import com.southerntw.safespace.data.api.PostCommentResponse
 import com.southerntw.safespace.data.api.PostThreadResponse
 import com.southerntw.safespace.data.api.ProfileResponse
 import com.southerntw.safespace.data.api.SafespaceApiService
@@ -181,6 +184,7 @@ class Repository @Inject constructor(
     }
 
     fun editProfile(token: String, id: String, name: String, email: String, password: String, avatar: String, about: String, birthdate: String, gender: String) : Flow<AuthUiState<EditProfileResponse>> {
+        Log.d("Edit", "Repository 1")
         val jsonObject = JSONObject()
         jsonObject.put("id", id)
         jsonObject.put("name", name)
@@ -194,14 +198,20 @@ class Repository @Inject constructor(
         val requestBody =
             jsonObject.toString().toRequestBody("application/json". toMediaTypeOrNull())
 
+        Log.d("Edit", "Repository 2")
+
         return flow {
             try {
+                Log.d("Edit", "Repository 3")
                 emit(AuthUiState.Idle)
                 emit(AuthUiState.Load)
+                Log.d("Edit", "Repository 4")
                 val responseProfile = safespaceApiService.editProfile("bearer $token", requestBody)
+                Log.d("Edit", responseProfile.toString())
                 emit(AuthUiState.Success(responseProfile))
             } catch (e: Exception) {
                 emit(AuthUiState.Failure(e))
+                Log.d("Edit", e.toString())
             }
         }.flowOn(Dispatchers.IO)
     }
@@ -243,6 +253,40 @@ class Repository @Inject constructor(
                 emit(ChatUiState.Success(response))
             } catch (e: Exception) {
                 emit(ChatUiState.Failure(e))
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+
+    suspend fun getComments(threadId: Int): Flow<UiState<CommentsResponse>> {
+        return flow {
+            try {
+                emit(UiState.Loading)
+                val response = safespaceApiService.getComments(threadId)
+                emit(UiState.Success(response))
+            } catch (e: Exception) {
+                emit(UiState.Failure(e))
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+
+    // modify this
+    fun postComment(userId: String, threadId: Int, comment: String): Flow<AuthUiState<PostCommentResponse>> {
+        val jsonObject = JSONObject().apply {
+            put("userId", userId)
+            put("threadId", threadId)
+            put("comment", comment)
+        }
+
+        val requestBody = jsonObject.toString().toRequestBody("application/json".toMediaTypeOrNull())
+
+        return flow {
+            try {
+                emit(AuthUiState.Idle)
+                emit(AuthUiState.Load)
+                val responseComment = safespaceApiService.postComment(requestBody)
+                emit(AuthUiState.Success(responseComment))
+            } catch (e: Exception) {
+                emit(AuthUiState.Failure(e))
             }
         }.flowOn(Dispatchers.IO)
     }
